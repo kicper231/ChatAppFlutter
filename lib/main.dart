@@ -1,5 +1,11 @@
+import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
+import 'package:chatapp/data_layer/authrepo.dart';
 import 'package:chatapp/firebase_options.dart';
+import 'package:chatapp/presentation/LoginRegisterToggle.dart';
+import 'package:chatapp/presentation/mainchatpage/mainchatpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,164 +28,99 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeblocBloc, ThemeblocState>(
         builder: (context, state) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             themeMode: state.actualTheme,
             darkTheme: ThemeData(
-              colorScheme: const ColorScheme(
-                  brightness: Brightness.dark,
-                  primary: Color(0xFFFFB1C8),
-                  onPrimary: Color(0xFF5E1133),
-                  primaryContainer: Color(0xFF7B2949),
-                  onPrimaryContainer: Color(0xFFFFD9E2),
-                  secondary: Color(0xFFE3BDC6),
-                  onSecondary: Color(0xFF422931),
-                  secondaryContainer: Color(0xFF5A3F47),
-                  onSecondaryContainer: Color(0xFFFFD9E2),
-                  tertiary: Color(0xFFFFB1C8),
-                  onTertiary: Color(0xFF650033),
-                  tertiaryContainer: Color(0xFF831E4A),
-                  onTertiaryContainer: Color(0xFFFFD9E2),
-                  error: Color(0xFFFFB4AB),
-                  errorContainer: Color(0xFF93000A),
-                  onError: Color(0xFF690005),
-                  onErrorContainer: Color(0xFFFFDAD6),
-                  background: Color(0xFF201A1B),
-                  onBackground: Color(0xFFEBE0E1),
-                  surface: Color(0xFF201A1B),
-                  onSurface: Color(0xFFEBE0E1),
-                  surfaceVariant: Color(0xFF514347),
-                  onSurfaceVariant: Color(0xFFD5C2C6),
-                  outline: Color(0xFF9E8C90),
-                  onInverseSurface: Color(0xFF201A1B),
-                  inverseSurface: Color(0xFFEBE0E1),
-                  inversePrimary: Color(0xFF984061),
-                  shadow: Color(0xFF000000),
-                  surfaceTint: Color(0xFFFFB1C8),
-                  outlineVariant: Color(0xFF514347),
-                  scrim: Color(0xFF000000)),
-            ),
-            theme: ThemeData(
+              useMaterial3: true,
               colorScheme: const ColorScheme(
                 brightness: Brightness.light,
-                primary: Color(0xFF984061),
+                primary: Color(0xFF006685),
                 onPrimary: Color(0xFFFFFFFF),
-                primaryContainer: Color(0xFFFFD9E2),
-                onPrimaryContainer: Color(0xFF3E001D),
-                secondary: Color(0xFF74565F),
+                primaryContainer: Color(0xFFBEE9FF),
+                onPrimaryContainer: Color(0xFF001F2A),
+                secondary: Color(0xFF4D616C),
                 onSecondary: Color(0xFFFFFFFF),
-                secondaryContainer: Color(0xFFFFD9E2),
-                onSecondaryContainer: Color(0xFF2B151C),
-                tertiary: Color(0xFFA23761),
+                secondaryContainer: Color(0xFFD0E6F2),
+                onSecondaryContainer: Color(0xFF081E27),
+                tertiary: Color(0xFF00639B),
                 onTertiary: Color(0xFFFFFFFF),
-                tertiaryContainer: Color(0xFFFFD9E2),
-                onTertiaryContainer: Color(0xFF3E001D),
+                tertiaryContainer: Color(0xFFCEE5FF),
+                onTertiaryContainer: Color(0xFF001D33),
                 error: Color(0xFFBA1A1A),
                 errorContainer: Color(0xFFFFDAD6),
                 onError: Color(0xFFFFFFFF),
                 onErrorContainer: Color(0xFF410002),
-                background: Color(0xFFFFFBFF),
-                onBackground: Color(0xFF201A1B),
-                surface: Color(0xFFFFFBFF),
-                onSurface: Color(0xFF201A1B),
-                surfaceVariant: Color(0xFFF2DDE1),
-                onSurfaceVariant: Color(0xFF514347),
-                outline: Color(0xFF837377),
-                onInverseSurface: Color(0xFFFAEEEF),
-                inverseSurface: Color(0xFF352F30),
-                inversePrimary: Color(0xFFFFB1C8),
+                background: Color(0xFFF8FDFF),
+                onBackground: Color(0xFF001F25),
+                surface: Color(0xFFF8FDFF),
+                onSurface: Color(0xFF001F25),
+                surfaceVariant: Color(0xFFDCE4E9),
+                onSurfaceVariant: Color(0xFF40484C),
+                outline: Color(0xFF70787D),
+                onInverseSurface: Color(0xFFD6F6FF),
+                inverseSurface: Color(0xFF00363F),
+                inversePrimary: Color(0xFF6AD3FF),
                 shadow: Color(0xFF000000),
-                surfaceTint: Color(0xFF984061),
-                outlineVariant: Color(0xFFD5C2C6),
+                surfaceTint: Color(0xFF006685),
+                outlineVariant: Color(0xFFC0C8CD),
                 scrim: Color(0xFF000000),
               ),
             ),
-            home: const MyHomePage(title: 'Flutter Demo Home Page'),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  bool isLightMode = true;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: Switch(
-            value: isLightMode,
-            onChanged: (bool value) {
-              setState(() {
-                isLightMode = !isLightMode;
-              });
-
-              context.read<ThemeblocBloc>().add(ThemeChange());
-            }),
-      ),
-      appBar: AppBar(
-        leading: Builder(builder: (context) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                _counter++;
-              });
-
-              Scaffold.of(context).openDrawer();
-            },
-            child: Center(
-              child: Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: Icon(Icons.menu),
-                ),
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: const ColorScheme(
+                brightness: Brightness.dark,
+                primary: Color(0xFF6AD3FF),
+                onPrimary: Color(0xFF003546),
+                primaryContainer: Color(0xFF004D65),
+                onPrimaryContainer: Color(0xFFBEE9FF),
+                secondary: Color(0xFFB4CAD6),
+                onSecondary: Color(0xFF1F333D),
+                secondaryContainer: Color(0xFF354A54),
+                onSecondaryContainer: Color(0xFFD0E6F2),
+                tertiary: Color(0xFF96CCFF),
+                onTertiary: Color(0xFF003353),
+                tertiaryContainer: Color(0xFF004A76),
+                onTertiaryContainer: Color(0xFFCEE5FF),
+                error: Color(0xFFFFB4AB),
+                errorContainer: Color(0xFF93000A),
+                onError: Color(0xFF690005),
+                onErrorContainer: Color(0xFFFFDAD6),
+                background: Color(0xFF001F25),
+                onBackground: Color(0xFFA6EEFF),
+                surface: Color(0xFF001F25),
+                onSurface: Color(0xFFA6EEFF),
+                surfaceVariant: Color(0xFF40484C),
+                onSurfaceVariant: Color(0xFFC0C8CD),
+                outline: Color(0xFF8A9297),
+                onInverseSurface: Color(0xFF001F25),
+                inverseSurface: Color(0xFFA6EEFF),
+                inversePrimary: Color(0xFF006685),
+                shadow: Color(0xFF000000),
+                surfaceTint: Color(0xFF6AD3FF),
+                outlineVariant: Color(0xFF40484C),
+                scrim: Color(0xFF000000),
+              ),
+            ),
+            home: RepositoryProvider(
+              create: (context) => AuthRepository(),
+              child: BlocProvider(
+                create: (context) => AuthSignInBloc(
+                    authRepository: context.read<AuthRepository>()),
+                child: StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return const MyHomePage(title: "Chats");
+                      } else {
+                        return LoginRegister();
+                      }
+                    }),
               ),
             ),
           );
-        }),
-        title: Text(widget.title),
+        },
       ),
-
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
