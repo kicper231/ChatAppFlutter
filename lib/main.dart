@@ -3,6 +3,7 @@ import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/data_layer/authrepo.dart';
 import 'package:chatapp/firebase_options.dart';
 import 'package:chatapp/presentation/LoginRegisterToggle.dart';
+import 'package:chatapp/presentation/chatpage/chatpage.dart';
 import 'package:chatapp/presentation/mainchatpage/mainchatpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -28,6 +29,10 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeblocBloc, ThemeblocState>(
         builder: (context, state) {
           return MaterialApp(
+            routes: {
+              '/chatpage': (context) => ChatPage(),
+              // Add other routes here
+            },
             debugShowCheckedModeBanner: false,
             themeMode: state.actualTheme,
             darkTheme: ThemeData(

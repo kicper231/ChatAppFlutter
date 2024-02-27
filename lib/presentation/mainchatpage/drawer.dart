@@ -64,13 +64,13 @@ class _MydrawerState extends State<Mydrawer> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    leading: Icon(Icons.home),
-                    title: Text('Home'),
+                    leading: const Icon(Icons.home),
+                    title: const Text('Home'),
                   ),
                   ListTile(
                     onTap: () {},
                     leading: Icon(Icons.settings),
-                    title: Text('Language Settings'),
+                    title: const Text('Language Settings'),
                   ),
                   ListTile(
                     onTap: () {

@@ -14,6 +14,12 @@ class AuthSignInRequired extends AuthSignInEvent {
   const AuthSignInRequired(this.email, this.password);
 }
 
+class AuthSignUpRequired extends AuthSignInEvent {
+  final String email;
+  final String password;
+  const AuthSignUpRequired({required this.email, required this.password});
+}
+
 class SignOutRequired extends AuthSignInEvent {
   const SignOutRequired();
 }

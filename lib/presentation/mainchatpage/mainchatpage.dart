@@ -1,11 +1,7 @@
-import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
-import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/presentation/mainchatpage/drawer.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -31,6 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawer: Mydrawer(),
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.pen))
         ],
@@ -45,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             child: Center(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
                 child: const Padding(
@@ -105,22 +103,32 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
               child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    return Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.amber),
-                            ),
-                            const Text("elo320"),
-                          ],
-                        ));
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed("/chatpage");
+                      },
+                      child: Container(
+                          color: Colors.grey,
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 60,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.amber),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text("elo320"),
+                            ],
+                          )),
+                    );
                   }),
             ),
           ],

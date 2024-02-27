@@ -1,11 +1,12 @@
-import 'package:chatapp/presentation/components/buttonlogin.dart';
+import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
+
 import 'package:chatapp/presentation/components/textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key, required this.toggleView});
 
-  void Register() {}
   final TextEditingController _emailControler = TextEditingController();
   final TextEditingController _passwordControler = TextEditingController();
   final TextEditingController _confirmPasswordControler =
@@ -62,8 +63,9 @@ class RegisterPage extends StatelessWidget {
                 onPressed: () {
                   if (_emailControler.text.isNotEmpty &&
                       _passwordControler.text.isNotEmpty) {
-                    // context.read<AuthSignInBloc>().add(AuthSignInRequired(
-                    //     _emailControler.text, _passwordControler.text));
+                    context.read<AuthSignInBloc>().add(AuthSignUpRequired(
+                        email: _emailControler.text,
+                        password: _passwordControler.text));
                   }
                 },
                 child: Container(
@@ -85,12 +87,12 @@ class RegisterPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Have a account? "),
+                const Text("Have a account? "),
                 GestureDetector(
                     onTap: () {
                       toggleView();
                     },
-                    child: Text("Login now",
+                    child: const Text("Login now",
                         style: TextStyle(fontWeight: FontWeight.bold)))
               ],
             ),

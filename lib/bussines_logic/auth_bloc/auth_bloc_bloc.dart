@@ -27,5 +27,17 @@ class AuthSignInBloc extends Bloc<AuthSignInEvent, AuthSignInState> {
       await _authRepository.signOut();
       emit(const AuthSignInFailure());
     });
+
+    on<AuthSignUpRequired>((event, emit) async {
+      emit(AuthSignInProcess());
+      try {
+        await _authRepository.signup(event.email, event.password);
+        emit(AuthSignInSuccess());
+      } on FirebaseAuthException catch (e) {
+        emit(AuthSignInFailure(message: e.code));
+      } catch (e) {
+        emit(const AuthSignInFailure());
+      }
+    });
   }
 }

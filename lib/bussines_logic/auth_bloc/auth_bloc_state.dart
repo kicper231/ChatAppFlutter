@@ -18,3 +18,5 @@ class AuthSignInFailure extends AuthSignInState {
 }
 
 class AuthSignInProcess extends AuthSignInState {}
+
+class AuthSignOutSuccess extends AuthSignInState {}
