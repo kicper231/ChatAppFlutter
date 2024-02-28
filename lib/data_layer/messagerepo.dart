@@ -48,7 +48,11 @@ class MessageRepository {
           .orderBy('timestamp', descending: false)
           .snapshots()
           .map((snapshot) {
-        return snapshot.docs.map((doc) => Message.fromMap(doc.data())).toList();
+        return snapshot.docs
+            .map((doc) => Message.fromMap(doc.data()))
+            .toList()
+            .reversed
+            .toList();
       });
     } catch (e) {
       return const Stream.empty();

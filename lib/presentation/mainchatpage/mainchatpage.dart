@@ -1,9 +1,9 @@
 import 'package:chatapp/bussines_logic/bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
-import 'package:chatapp/data_layer/model/message.dart';
+
 import 'package:chatapp/presentation/chatpage/chatpage.dart';
 import 'package:chatapp/presentation/mainchatpage/drawer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';

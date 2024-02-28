@@ -5,7 +5,7 @@ import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/data_layer/authrepo.dart';
 import 'package:chatapp/firebase_options.dart';
 import 'package:chatapp/presentation/LoginRegisterToggle.dart';
-import 'package:chatapp/presentation/chatpage/chatpage.dart';
+
 import 'package:chatapp/presentation/mainchatpage/mainchatpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

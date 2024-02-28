@@ -41,6 +41,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         scrolledUnderElevation: 0,
         title: Row(
@@ -63,11 +64,29 @@ class _ChatPageState extends State<ChatPage> {
                 scrollDirection: Axis.vertical,
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    alignment: messages[index].receiverId == receiver.userId
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    child: Text(messages[index].message),
+                  return Column(
+                    crossAxisAlignment:
+                        messages[index].receiverId == receiver.userId
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
+                    children: [
+                      Text(messages[index].senderEmail),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(messages[index].message,
+                                  style: TextStyle(fontSize: 16)),
+                            )),
+                      ),
+                    ],
                   );
                 },
               ),
