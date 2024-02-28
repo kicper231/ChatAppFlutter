@@ -1,4 +1,5 @@
 import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/data_layer/authrepo.dart';
 import 'package:chatapp/firebase_options.dart';
@@ -30,8 +31,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             routes: {
-              '/chatpage': (context) => ChatPage(),
-              // Add other routes here
+              '/chatpage': (context) => const ChatPage(),
             },
             debugShowCheckedModeBanner: false,
             themeMode: state.actualTheme,
@@ -109,16 +109,23 @@ class MyApp extends StatelessWidget {
             ),
             home: RepositoryProvider(
               create: (context) => AuthRepository(),
-              child: BlocProvider(
-                create: (context) => AuthSignInBloc(
-                    authRepository: context.read<AuthRepository>()),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => AuthSignInBloc(
+                        authRepository: context.read<AuthRepository>()),
+                  ),
+                  BlocProvider(
+                    create: (context) => FriendsBloc(),
+                  ),
+                ],
                 child: StreamBuilder(
                     stream: FirebaseAuth.instance.authStateChanges(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return const MyHomePage(title: "Chats");
                       } else {
-                        return LoginRegister();
+                        return const LoginRegister();
                       }
                     }),
               ),

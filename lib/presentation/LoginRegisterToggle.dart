@@ -3,6 +3,8 @@ import 'package:chatapp/presentation/registerpage/registerpage.dart';
 import 'package:flutter/material.dart';
 
 class LoginRegister extends StatefulWidget {
+  const LoginRegister({super.key});
+
   @override
   _LoginRegisterState createState() => _LoginRegisterState();
 }

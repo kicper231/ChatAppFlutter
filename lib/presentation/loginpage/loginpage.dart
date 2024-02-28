@@ -77,12 +77,12 @@ class LoginPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Not a member? "),
+              const Text("Not a member? "),
               GestureDetector(
                   onTap: () {
                     toggleView();
                   },
-                  child: Text("Register now",
+                  child: const Text("Register now",
                       style: TextStyle(fontWeight: FontWeight.bold)))
             ],
           ),

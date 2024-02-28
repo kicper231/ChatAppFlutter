@@ -1,7 +1,9 @@
+import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/presentation/mainchatpage/drawer.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -25,12 +27,55 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Mydrawer(),
+      drawer: const Mydrawer(),
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.pen))
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                CupertinoIcons.pen,
+                color: Theme.of(context).colorScheme.onBackground,
+              )),
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Add Friend'),
+                      content: const TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Enter nickname',
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Perform friend adding logic here
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Friends Request Sent!')));
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Add'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: Icon(
+                CupertinoIcons.person,
+                color: Theme.of(context).colorScheme.onBackground,
+              ))
         ],
         leading: Builder(builder: (context) {
           return GestureDetector(
@@ -56,7 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }),
         title: Text(widget.title, style: const TextStyle()),
       ),
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -78,67 +122,91 @@ class _MyHomePageState extends State<MyHomePage> {
               )),
             ),
             SizedBox(
-              height: 100,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.amber),
-                            ),
-                            const Text("elo320"),
-                          ],
-                        ));
-                  }),
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Expanded(
-              child: ListView.builder(
-                  physics: const ClampingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed("/chatpage");
-                      },
-                      child: Container(
-                          color: Colors.grey,
+              height: 110,
+              child: BlocBuilder<FriendsBloc, FriendsBlocState>(
+                builder: (context, state) {
+                  if (state is FriendsBlocLoaded) {
+                    return ListView.builder(
+                      itemCount: state.friends.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Container(
                           padding: const EdgeInsets.all(10),
-                          child: Row(
+                          child: Column(
                             children: [
                               Container(
                                 width: 60,
                                 height: 60,
                                 decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.amber),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const CircleAvatar(
+                                  child: Icon(Icons.person),
+                                ),
                               ),
-                              const SizedBox(
-                                width: 10,
+                              Padding(
+                                padding: EdgeInsets.all(2.0),
+                                child: Text(state.friends[index]),
                               ),
-                              const Text("elo320"),
                             ],
-                          )),
+                          ),
+                        );
+                      },
                     );
-                  }),
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                },
+              ),
+            ),
+            BlocBuilder<FriendsBloc, FriendsBlocState>(
+              builder: (context, state) {
+                if (state is FriendsBlocLoaded) {
+                  return Expanded(
+                    child: ListView.builder(
+                      physics: const ClampingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: state.friends.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed("/chatpage");
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                  ),
+                                  child:
+                                      CircleAvatar(child: Icon(Icons.person)),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(state.friends[index]),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

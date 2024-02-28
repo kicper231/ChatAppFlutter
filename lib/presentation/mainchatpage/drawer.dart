@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Mydrawer extends StatefulWidget {
+  const Mydrawer({super.key});
+
   @override
   State<Mydrawer> createState() => _MydrawerState();
 }
@@ -17,7 +19,7 @@ class _MydrawerState extends State<Mydrawer> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
+          const SizedBox(
             height: 200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -48,8 +50,8 @@ class _MydrawerState extends State<Mydrawer> {
               child: Column(
                 children: [
                   ListTile(
-                    title: Text("Dark Mode"),
-                    leading: Icon(Icons.lightbulb_outline),
+                    title: const Text("Dark Mode"),
+                    leading: const Icon(Icons.lightbulb_outline),
                     trailing: Switch(
                       value: isLightMode,
                       onChanged: (bool value) {
@@ -69,26 +71,26 @@ class _MydrawerState extends State<Mydrawer> {
                   ),
                   ListTile(
                     onTap: () {},
-                    leading: Icon(Icons.settings),
+                    leading: const Icon(Icons.settings),
                     title: const Text('Language Settings'),
                   ),
                   ListTile(
                     onTap: () {
-                      context.read<AuthSignInBloc>().add(SignOutRequired());
+                      context.read<AuthSignInBloc>().add(const SignOutRequired());
                     },
                     title: const Text("Log Out"),
-                    leading: Icon(Icons.exit_to_app),
+                    leading: const Icon(Icons.exit_to_app),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   DefaultTextStyle(
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                     ),
                     child: Container(
                       margin: const EdgeInsets.symmetric(
                         vertical: 16.0,
                       ),
-                      child: Text('Terms of Service & Privacy Policy'),
+                      child: const Text('Terms of Service & Privacy Policy'),
                     ),
                   )
                 ],
