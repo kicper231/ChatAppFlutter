@@ -1,5 +1,6 @@
 import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,7 @@ class _MydrawerState extends State<Mydrawer> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(
+          SizedBox(
             height: 200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +36,7 @@ class _MydrawerState extends State<Mydrawer> {
                 Padding(
                   padding: EdgeInsets.all(6.0),
                   child: Text(
-                    'User Name',
+                    FirebaseAuth.instance.currentUser?.email ?? '',
                     style: TextStyle(
                       fontFamily: 'Wendy',
                       fontSize: 20,
@@ -76,7 +77,9 @@ class _MydrawerState extends State<Mydrawer> {
                   ),
                   ListTile(
                     onTap: () {
-                      context.read<AuthSignInBloc>().add(const SignOutRequired());
+                      context
+                          .read<AuthSignInBloc>()
+                          .add(const SignOutRequired());
                     },
                     title: const Text("Log Out"),
                     leading: const Icon(Icons.exit_to_app),

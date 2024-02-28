@@ -1,5 +1,9 @@
+import 'package:chatapp/bussines_logic/bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
+import 'package:chatapp/data_layer/model/message.dart';
+import 'package:chatapp/presentation/chatpage/chatpage.dart';
 import 'package:chatapp/presentation/mainchatpage/drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -146,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(2.0),
-                                child: Text(state.friends[index]),
+                                child: Text(state.friends[index].email),
                               ),
                             ],
                           ),
@@ -170,7 +174,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pushNamed("/chatpage");
+                            context.read<MessageBloc>().add(EnterChat(
+                                userToEnter: state.friends[index].userId));
+
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChatPage(
+                                receiver: state.friends[index],
+                              ),
+                            ));
                           },
                           child: Container(
                             padding: const EdgeInsets.all(10),
@@ -191,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Text(state.friends[index]),
+                                Text(state.friends[index].email),
                               ],
                             ),
                           ),

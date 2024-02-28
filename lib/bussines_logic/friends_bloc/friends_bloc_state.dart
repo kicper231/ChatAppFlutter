@@ -12,7 +12,7 @@ final class FriendsBlocInitial extends FriendsBlocState {}
 final class FriendsBlocLoading extends FriendsBlocState {}
 
 final class FriendsBlocLoaded extends FriendsBlocState {
-  final List<String> friends;
+  final List<Friend> friends;
   const FriendsBlocLoaded({required this.friends});
   @override
   List<Object> get props => [friends];

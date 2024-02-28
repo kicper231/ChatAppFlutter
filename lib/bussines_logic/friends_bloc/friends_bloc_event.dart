@@ -10,7 +10,7 @@ sealed class FriendsBlocEvent extends Equatable {
 class GetFriendList extends FriendsBlocEvent {}
 
 class FriendListChange extends FriendsBlocEvent {
-  final List<String> friends;
+  final List<Friend> friends;
   const FriendListChange({required this.friends});
   @override
   List<Object> get props => [friends];
