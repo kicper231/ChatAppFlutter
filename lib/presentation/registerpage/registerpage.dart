@@ -68,17 +68,12 @@ class RegisterPage extends StatelessWidget {
                         password: _passwordControler.text));
                   }
                 },
-                child: Container(
-                    // decoration: BoxDecoration(
-                    //     border: Border.all(
-                    //         width: 1, color: Theme.of(context).colorScheme.outline),
-                    //     borderRadius: const BorderRadius.all(Radius.circular(30))),
-                    child: const Center(
+                child: const Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("Register"),
                   ),
-                )),
+                ),
               ),
             ),
             const SizedBox(

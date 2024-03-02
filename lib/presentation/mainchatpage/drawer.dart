@@ -25,19 +25,19 @@ class _MydrawerState extends State<Mydrawer> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 50.0,
 
                   child: Icon(Icons.person), // Placeholder icon
                 ),
                 Padding(
-                  padding: EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Text(
                     FirebaseAuth.instance.currentUser?.email ?? '',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Wendy',
                       fontSize: 20,
                     ),
@@ -47,57 +47,53 @@ class _MydrawerState extends State<Mydrawer> {
             ),
           ),
           Expanded(
-            child: Container(
-              child: Column(
-                children: [
-                  ListTile(
-                    title: const Text("Dark Mode"),
-                    leading: const Icon(Icons.lightbulb_outline),
-                    trailing: Switch(
-                      value: isLightMode,
-                      onChanged: (bool value) {
-                        setState(() {
-                          isLightMode = value;
-                        });
-                        context.read<ThemeblocBloc>().add(ThemeChange());
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.of(context).pop();
+            child: Column(
+              children: [
+                ListTile(
+                  title: const Text("Dark Mode"),
+                  leading: const Icon(Icons.lightbulb_outline),
+                  trailing: Switch(
+                    value: isLightMode,
+                    onChanged: (bool value) {
+                      setState(() {
+                        isLightMode = value;
+                      });
+                      context.read<ThemeblocBloc>().add(ThemeChange());
                     },
-                    leading: const Icon(Icons.home),
-                    title: const Text('Home'),
                   ),
-                  ListTile(
-                    onTap: () {},
-                    leading: const Icon(Icons.settings),
-                    title: const Text('Language Settings'),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  leading: const Icon(Icons.home),
+                  title: const Text('Home'),
+                ),
+                ListTile(
+                  onTap: () {},
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Language Settings'),
+                ),
+                ListTile(
+                  onTap: () {
+                    context.read<AuthSignInBloc>().add(const SignOutRequired());
+                  },
+                  title: const Text("Log Out"),
+                  leading: const Icon(Icons.exit_to_app),
+                ),
+                const Spacer(),
+                DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 12,
                   ),
-                  ListTile(
-                    onTap: () {
-                      context
-                          .read<AuthSignInBloc>()
-                          .add(const SignOutRequired());
-                    },
-                    title: const Text("Log Out"),
-                    leading: const Icon(Icons.exit_to_app),
-                  ),
-                  const Spacer(),
-                  DefaultTextStyle(
-                    style: const TextStyle(
-                      fontSize: 12,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 16.0,
                     ),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                      ),
-                      child: const Text('Terms of Service & Privacy Policy'),
-                    ),
-                  )
-                ],
-              ),
+                    child: const Text('Terms of Service & Privacy Policy'),
+                  ),
+                )
+              ],
             ),
           ),
         ],

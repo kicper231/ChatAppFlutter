@@ -10,7 +10,7 @@ class ChatPage extends StatefulWidget {
   const ChatPage({Key? key, required this.receiver}) : super(key: key);
 
   @override
-  _ChatPageState createState() => _ChatPageState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
@@ -85,12 +85,12 @@ class _ChatPageState extends State<ChatPage> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .primaryContainer,
-                                      borderRadius: BorderRadius.all(
+                                      borderRadius: const BorderRadius.all(
                                           Radius.circular(10))),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(messages[index].message,
-                                        style: TextStyle(fontSize: 16)),
+                                        style: const TextStyle(fontSize: 16)),
                                   )),
                             ),
                           ],

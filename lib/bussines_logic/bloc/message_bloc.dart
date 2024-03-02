@@ -15,6 +15,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   String fromuser = '';
   String touser = '';
 
+  // ignore: unused_field
   late StreamSubscription? _messageSubscription;
   late Stream<List<Message>> messages;
   MessageBloc({

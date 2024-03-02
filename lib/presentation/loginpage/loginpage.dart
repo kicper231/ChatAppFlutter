@@ -49,28 +49,30 @@ class LoginPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton(
-              // padding: const EdgeInsets.all(15.0),
+                // padding: const EdgeInsets.all(15.0),
 
-              onPressed: () {
-                if (_emailControler.text.isNotEmpty &&
-                    _passwordControler.text.isNotEmpty) {
-                  context.read<AuthSignInBloc>().add(AuthSignInRequired(
-                      _emailControler.text, _passwordControler.text));
-                }
-              },
-              child: Container(
-                  // decoration: BoxDecoration(
-                  //     border: Border.all(
-                  //         width: 1, color: Theme.of(context).colorScheme.outline),
-                  //     borderRadius: const BorderRadius.all(Radius.circular(30))),
-                  child: const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text("Login"),
-                ),
-              )),
-            ),
+                onPressed: () {
+                  if (_emailControler.text.isNotEmpty &&
+                      _passwordControler.text.isNotEmpty) {
+                    context.read<AuthSignInBloc>().add(AuthSignInRequired(
+                        _emailControler.text, _passwordControler.text));
+                  }
+                },
+                child:
+                    //  Container(
+                    // decoration: BoxDecoration(
+                    //     border: Border.all(
+                    //         width: 1, color: Theme.of(context).colorScheme.outline),
+                    //     borderRadius: const BorderRadius.all(Radius.circular(30))),
+                    // child:
+                    const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Login"),
+                  ),
+                )),
           ),
+          // ),
           const SizedBox(
             height: 15,
           ),
