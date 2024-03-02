@@ -32,7 +32,7 @@ class ReceiveMessageSuccess extends MessageState {
   const ReceiveMessageSuccess({required this.messages});
 
   @override
-  List<Object> get props => [messages];
+  List<Object> get props => [messages, identityHashCode(this)];
 }
 
 class ReceiveMessageFailure extends MessageState {

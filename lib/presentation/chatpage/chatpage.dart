@@ -59,34 +59,44 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                reverse: true,
-                scrollDirection: Axis.vertical,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    crossAxisAlignment:
-                        messages[index].receiverId == receiver.userId
-                            ? CrossAxisAlignment.end
-                            : CrossAxisAlignment.start,
-                    children: [
-                      Text(messages[index].senderEmail),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: Padding(
+              child: BlocBuilder<MessageBloc, MessageState>(
+                builder: (context, state) {
+                  if (state is ReceiveMessageSuccess) {
+                    messages = state.messages;
+                  }
+                  return ListView.builder(
+                    reverse: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                        child: Column(
+                          crossAxisAlignment:
+                              messages[index].receiverId == receiver.userId
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                          children: [
+                            Text(messages[index].senderEmail),
+                            Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(messages[index].message,
-                                  style: TextStyle(fontSize: 16)),
-                            )),
-                      ),
-                    ],
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryContainer,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(messages[index].message,
+                                        style: TextStyle(fontSize: 16)),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -109,7 +119,8 @@ class _ChatPageState extends State<ChatPage> {
                       context.read<MessageBloc>().add(SendMessage(
                           message: messageController.text,
                           receiver: receiver.userId));
-                      setState(() {}); // Move setState here
+                      setState(() {});
+                      messageController.clear(); // Move setState here
                     },
                   ),
                 ],

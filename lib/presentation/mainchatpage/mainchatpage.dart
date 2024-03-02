@@ -1,5 +1,6 @@
 import 'package:chatapp/bussines_logic/bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
+import 'package:chatapp/data_layer/model/friend.dart';
 
 import 'package:chatapp/presentation/chatpage/chatpage.dart';
 import 'package:chatapp/presentation/mainchatpage/drawer.dart';
@@ -7,6 +8,7 @@ import 'package:chatapp/presentation/mainchatpage/drawer.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -19,12 +21,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   bool isLightMode = true;
 
-  void _incrementCounter() {
+  List<Friend> filtredFriends = [];
+  TextEditingController searchControler = TextEditingController();
+
+  @override
+  void dispose() {
+    // clean up
+    searchControler.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    searchControler.addListener(_onSearchChanged);
+  }
+
+  void _onSearchChanged() {
     setState(() {
-      _counter++;
+      if (searchControler.text.isEmpty) {}
     });
   }
 
@@ -63,7 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            // Perform friend adding logic here
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text('Friends Request Sent!')));
@@ -84,10 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: Builder(builder: (context) {
           return GestureDetector(
             onTap: () {
-              setState(() {
-                _counter++;
-              });
-
               Scaffold.of(context).openDrawer();
             },
             child: Center(
@@ -109,21 +122,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
-                  decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(8),
-                isDense: true,
-                prefixIcon: Padding(
-                  padding: EdgeInsets.only(left: 15.0, right: 8),
-                  child: Icon(Icons.search),
-                ),
-                prefixIconConstraints: BoxConstraints(),
-                hintText: "Search",
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(40))),
-              )),
+                  controller: searchControler,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(8),
+                    isDense: true,
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.only(left: 15.0, right: 8),
+                      child: Icon(Icons.search),
+                    ),
+                    prefixIconConstraints: BoxConstraints(),
+                    hintText: "Search",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(40))),
+                  )),
             ),
             SizedBox(
               height: 110,
