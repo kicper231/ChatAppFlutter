@@ -11,14 +11,6 @@ This is a simple Flutter application that utilizes the BLoC state management pat
 - Real-time chat feature
 - 
 
-## Getting Started
-
-To get started with this app, follow these steps:
-
-1. Clone the repository.
-2. Open the project in your preferred Flutter development environment.
-3. Set up Firebase and configure the necessary credentials.
-4. Run the app on your preferred device or emulator.
 
 ## Dependencies
 
