@@ -1,4 +1,4 @@
-import 'package:chatapp/bussines_logic/bloc/message_bloc.dart';
+import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
 import 'package:chatapp/data_layer/model/friend.dart';
 import 'package:chatapp/data_layer/model/message.dart';
 import 'package:flutter/material.dart';

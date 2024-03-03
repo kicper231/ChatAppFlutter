@@ -1,4 +1,5 @@
-import 'package:chatapp/bussines_logic/bloc/message_bloc.dart';
+import 'package:chatapp/bussines_logic/addfriend_bloc/addfriend_bloc.dart';
+import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/data_layer/model/friend.dart';
 
@@ -25,6 +26,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Friend> filtredFriends = [];
   TextEditingController searchControler = TextEditingController();
   late FocusNode _focusNode;
+  TextEditingController addfriendController = TextEditingController();
+
   @override
   void dispose() {
     // clean up
@@ -77,8 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text('Add Friend'),
-                      content: const TextField(
-                        decoration: InputDecoration(
+                      content: TextField(
+                        controller: addfriendController,
+                        decoration: const InputDecoration(
                           hintText: 'Enter nickname',
                         ),
                       ),
@@ -86,15 +90,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
+                            addfriendController.clear();
                           },
                           child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Friends Request Sent!')));
+                            context
+                                .read<AddfriendBloc>()
+                                .add(AddFriend(id: addfriendController.text));
                             Navigator.of(context).pop();
+                            addfriendController.clear();
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //         content: Text('Friends Request Sent!')));
+                            //   Navigator.of(context).pop();
                           },
                           child: const Text('Add'),
                         ),
@@ -128,14 +138,32 @@ class _MyHomePageState extends State<MyHomePage> {
         }),
         title: Text(widget.title, style: const TextStyle()),
       ),
-      body: BlocListener<FriendsBloc, FriendsBlocState>(
-        listener: (context, state) {
-          if (state is FriendsBlocLoaded) {
-            setState(() {
-              filtredFriends = state.friends;
-            });
-          }
-        },
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<FriendsBloc, FriendsBlocState>(
+            listener: (context, state) {
+              if (state is FriendsBlocLoaded) {
+                setState(() {
+                  filtredFriends = state.friends;
+                });
+              }
+            },
+          ),
+          BlocListener<AddfriendBloc, AddfriendState>(
+            listener: (context, state) {
+              if (state is AddfriendSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Friends Request Sent!')));
+              }
+              if (state is AddfriendFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: const Text('User not found!'),
+                  backgroundColor: Theme.of(context).colorScheme.onError,
+                ));
+              }
+            },
+          ),
+        ],
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
