@@ -1,3 +1,4 @@
+import 'package:chatapp/data_layer/model/friend.dart';
 import 'package:chatapp/data_layer/model/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,6 +30,43 @@ class MessageRepository {
         .doc(chatRoomId)
         .collection("messages")
         .add(newMessage.toMap());
+
+    // update friends and last message
+    final listasender = await _firestore
+        .collection('users')
+        .doc(senderId)
+        .get()
+        .then((value) => (value.data()!['friends'] as List<dynamic>)
+            .map((e) => Friend.fromMap(e))
+            .toList());
+
+    final listreceiver = await _firestore
+        .collection('users')
+        .doc(receiverId)
+        .get()
+        .then((value) => (value.data()!['friends'] as List<dynamic>)
+            .map((e) => Friend.fromMap(e))
+            .toList());
+
+    Friend receiver =
+        listasender.firstWhere((element) => element.userId == receiverId);
+    Friend sender =
+        listreceiver.firstWhere((element) => element.userId == senderId);
+
+    sender.lastMessage = message;
+    sender.timestamp = Timestamp.now().microsecondsSinceEpoch.toString();
+    receiver.lastMessage = message;
+    receiver.timestamp = Timestamp.now().microsecondsSinceEpoch.toString();
+
+    // nie wiem co tu zaszlo tak podpowiedzial bóg google
+    await _firestore
+        .collection('users')
+        .doc(senderId)
+        .update({'friends': listasender.map((e) => e.toMap()).toList()});
+    await _firestore
+        .collection('users')
+        .doc(receiverId)
+        .update({'friends': listreceiver.map((e) => e.toMap()).toList()});
   }
 
   //get messages

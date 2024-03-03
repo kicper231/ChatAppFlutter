@@ -1,16 +1,31 @@
-# chatapp
+# Chat App
 
-A new Flutter project.
+This is a simple Flutter application that utilizes the BLoC state management pattern and Firebase database. The app allows users to add friends and engage in real-time chats.
+
+## Features
+
+- User-friendly interface :3
+- BLoC state management (like mmmv model)
+- Firebase database integration 
+- Add friends functionality
+- Real-time chat feature
+- 
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To get started with this app, follow these steps:
 
-A few resources to get you started if this is your first Flutter project:
+1. Clone the repository.
+2. Open the project in your preferred Flutter development environment.
+3. Set up Firebase and configure the necessary credentials.
+4. Run the app on your preferred device or emulator.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Dependencies
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This app relies on the following dependencies:
+
+- flutter_bloc: ^7.0.0
+- firebase_core: ^1.0.0
+- cloud_firestore: ^2.0.0
+- firebase_auth: ^1.0.0
+

@@ -2,6 +2,7 @@ import 'package:chatapp/bussines_logic/addfriend_bloc/addfriend_bloc.dart';
 import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/data_layer/model/friend.dart';
+import 'package:chatapp/helper.dart';
 
 import 'package:chatapp/presentation/chatpage/chatpage.dart';
 import 'package:chatapp/presentation/mainchatpage/drawer.dart';
@@ -67,12 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
         scrolledUnderElevation: 0,
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                CupertinoIcons.pen,
-                color: Theme.of(context).colorScheme.onBackground,
-              )),
+          // IconButton(
+          //     onPressed: () {},
+          //     icon: Icon(
+          //       CupertinoIcons.pen,
+          //       color: Theme.of(context).colorScheme.onBackground,
+          //     )),
           IconButton(
               onPressed: () {
                 showDialog(
@@ -153,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
             listener: (context, state) {
               if (state is AddfriendSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Friends Request Sent!')));
+                    const SnackBar(content: Text('Friend Added!')));
               }
               if (state is AddfriendFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -252,11 +253,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         context.read<MessageBloc>().add(EnterChat(
                             userToEnter: filtredFriends[index].userId));
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ChatPage(
-                            receiver: filtredFriends[index],
-                          ),
-                        ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatPage(
+                                receiver: filtredFriends[index],
+                              ),
+                            ));
                       },
                       child: Container(
                         padding: const EdgeInsets.all(10),
@@ -277,7 +280,26 @@ class _MyHomePageState extends State<MyHomePage> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(filtredFriends[index].email),
+                            Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(filtredFriends[index].email,
+                                      style: const TextStyle(fontSize: 16)),
+                                  Row(
+                                    children: [
+                                      Text(filtredFriends[index].lastMessage!,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 12)),
+                                      const Text('  '),
+                                      Text(
+                                          formatTimestamp(
+                                              filtredFriends[index].timestamp!),
+                                          style: const TextStyle(fontSize: 12)),
+                                    ],
+                                  ),
+                                ]),
                           ],
                         ),
                       ),

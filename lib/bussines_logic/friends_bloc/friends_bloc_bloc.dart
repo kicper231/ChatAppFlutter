@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:chatapp/data_layer/friendsrepo.dart';
 import 'package:chatapp/data_layer/model/friend.dart';
@@ -10,12 +12,13 @@ class FriendsBloc extends Bloc<FriendsBlocEvent, FriendsBlocState> {
   final FriendsInterface _friendsRepository;
 
   late final Stream<List<Friend>> friends;
+  StreamSubscription<List<Friend>>? friendsSubscription;
 
   FriendsBloc({FriendsInterface? friendsRepository})
       : _friendsRepository = friendsRepository ?? FriendsRepository(),
         super(FriendsBlocInitial()) {
     friends = _friendsRepository.getFriends();
-    friends.listen((friendsList) {
+    friendsSubscription = friends.listen((friendsList) {
       add(FriendListChange(friends: friendsList));
     });
 
@@ -26,6 +29,12 @@ class FriendsBloc extends Bloc<FriendsBlocEvent, FriendsBlocState> {
     on<GetFriendList>((event, emit) {
       friends = _friendsRepository.getFriends();
       emit(FriendsBlocLoaded(friends: friends as List<Friend>));
+    });
+
+    on<FriendLogout>((event, emit) {
+      friendsSubscription?.cancel();
+      friendsSubscription = null;
+      emit(FriendsBlocInitial());
     });
   }
 }

@@ -15,3 +15,5 @@ class FriendListChange extends FriendsBlocEvent {
   @override
   List<Object> get props => [friends];
 }
+
+class FriendLogout extends FriendsBlocEvent {}

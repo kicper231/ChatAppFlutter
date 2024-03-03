@@ -19,6 +19,7 @@ class AuthRepository {
       _firestore.collection('users').doc(user.user!.uid).set({
         'email': email,
         'uid': user.user!.uid,
+        'friends': [],
       }, SetOptions(merge: true));
     } catch (e) {
       throw Exception(e);
@@ -34,6 +35,7 @@ class AuthRepository {
       _firestore.collection('users').doc(user.user!.uid).set({
         'email': email,
         'uid': user.user!.uid,
+        'friends': [],
       });
     } catch (e) {
       throw Exception(e);

@@ -8,8 +8,7 @@ part 'themebloc_state.dart';
 class ThemeblocBloc extends Bloc<ThemeblocEvent, ThemeblocState> {
   ThemeMode actualTheme;
 
-  ThemeblocBloc({required this.actualTheme})
-      : super(const ThemeState(ThemeMode.light)) {
+  ThemeblocBloc({required this.actualTheme}) : super(ThemeState(actualTheme)) {
     on<ThemeChange>((event, emit) {
       actualTheme =
           actualTheme == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;

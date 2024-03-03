@@ -24,12 +24,20 @@ class FriendsRepository implements FriendsInterface {
           .snapshots()
           .map((snapshot) {
         final friends = snapshot['friends'];
+
         if (friends == null) {
           return [];
         }
+        if (friends.isEmpty) {
+          return [];
+        }
+
         return (friends as List<dynamic>)
-            .map((doc) =>
-                Friend(email: doc['email'] ?? '', userId: doc['userId'] ?? ''))
+            .map((doc) => Friend(
+                email: doc['email'] ?? '',
+                userId: doc['uid'] ?? '',
+                lastMessage: doc['lastMessage'] ?? '',
+                timestamp: doc['timestamp'] ?? ''))
             .toList();
       });
     } catch (e) {
@@ -58,11 +66,22 @@ class FriendsRepository implements FriendsInterface {
       if (userId == '') {
         throw Exception('User not found');
       }
-      // sprawdzenie czy juz go nie ma w liscie znajomych
+      // stworzenie dwóch
       Friend newFriend = Friend(email: userEmail, userId: userId);
-      //dodanie
+      Friend newFriendtwo = Friend(
+          email: _auth.currentUser!.email!, userId: _auth.currentUser!.uid);
+
       await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
         'friends': FieldValue.arrayUnion([newFriend.toMap()]),
+      });
+      // await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
+      //   'friends': FieldValue.arrayUnion([newFriendtwo.toMap()]),
+      // });
+      // await _firestore.collection('users').doc(userId).update({
+      //   'friends': FieldValue.arrayUnion([newFriend.toMap()]),
+      // });
+      await _firestore.collection('users').doc(userId).update({
+        'friends': FieldValue.arrayUnion([newFriendtwo.toMap()]),
       });
     } catch (e) {
       throw Exception(e);
