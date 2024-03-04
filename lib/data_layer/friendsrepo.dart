@@ -48,12 +48,12 @@ class FriendsRepository implements FriendsInterface {
   @override
   Future<void> addFriend(String userEmail) async {
     try {
-      final UserRef = await _firestore
+      final userRef = await _firestore
           .collection('users')
           .where('email', isEqualTo: userEmail)
           .get();
 
-      if (UserRef.docs.isEmpty) {
+      if (userRef.docs.isEmpty) {
         throw Exception('User not found');
       }
 

@@ -21,5 +21,9 @@ class AddfriendBloc extends Bloc<AddfriendEvent, AddfriendState> {
         emit(AddfriendFailure());
       }
     });
+
+    on<ResetState>((event, emit) {
+      emit(AddfriendInitial());
+    });
   }
 }

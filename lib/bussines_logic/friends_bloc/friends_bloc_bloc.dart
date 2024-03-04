@@ -19,7 +19,9 @@ class FriendsBloc extends Bloc<FriendsBlocEvent, FriendsBlocState> {
         super(FriendsBlocInitial()) {
     friends = _friendsRepository.getFriends();
     friendsSubscription = friends.listen((friendsList) {
-      add(FriendListChange(friends: friendsList));
+      if (friendsSubscription != null) {
+        add(FriendListChange(friends: friendsList));
+      }
     });
 
     on<FriendListChange>((event, emit) {

@@ -13,3 +13,6 @@ final class AddFriend extends AddfriendEvent {
   @override
   List<Object> get props => [id];
 }
+
+
+final class ResetState extends AddfriendEvent {}

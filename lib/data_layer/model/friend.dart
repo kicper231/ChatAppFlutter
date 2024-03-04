@@ -3,11 +3,14 @@ class Friend {
   final String email;
   String? lastMessage;
   String? timestamp;
+  String? image;
+
   Friend({
     required this.userId,
     required this.email,
     this.lastMessage,
     this.timestamp,
+    this.image,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,6 +19,7 @@ class Friend {
       'email': email,
       'lastMessage': lastMessage ?? '',
       'timestamp': timestamp ?? '',
+      'Image': image ?? '',
     };
   }
 
@@ -26,6 +30,7 @@ class Friend {
       email: map['email'],
       lastMessage: map['lastMessage'] ?? '',
       timestamp: map['timestamp'] ?? '',
+      image: map['Image'] ?? '',
     );
   }
 }

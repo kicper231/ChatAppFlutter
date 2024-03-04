@@ -1,4 +1,4 @@
-import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic/auth_bloc/user_sign_in_bloc.dart';
 
 import 'package:chatapp/presentation/components/textfield.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   if (_emailControler.text.isNotEmpty &&
                       _passwordControler.text.isNotEmpty) {
-                    context.read<AuthSignInBloc>().add(AuthSignInRequired(
+                    context.read<UserSignInBloc>().add(UserSignInRequired(
                         _emailControler.text, _passwordControler.text));
                   }
                 },

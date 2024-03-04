@@ -78,38 +78,40 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Add Friend'),
-                      content: TextField(
-                        controller: addfriendController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter nickname',
+                  builder: (BuildContext dialogContext) {
+                    return BlocProvider<AddfriendBloc>.value(
+                      value: BlocProvider.of<AddfriendBloc>(context),
+                      child: AlertDialog(
+                        title: const Text('Add Friend'),
+                        content: TextField(
+                          controller: addfriendController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter nickname',
+                          ),
                         ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(dialogContext).pop();
+                              addfriendController.clear();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<AddfriendBloc>()
+                                  .add(AddFriend(id: addfriendController.text));
+                              Navigator.of(dialogContext).pop();
+                              addfriendController.clear();
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //     const SnackBar(content: Text('Friends Request Sent!')));
+                              // Navigator.of(context).pop();
+                            },
+                            child: const Text('Add'),
+                          ),
+                        ],
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            addfriendController.clear();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            context
-                                .read<AddfriendBloc>()
-                                .add(AddFriend(id: addfriendController.text));
-                            Navigator.of(context).pop();
-                            addfriendController.clear();
-                            // ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(
-                            //         content: Text('Friends Request Sent!')));
-                            //   Navigator.of(context).pop();
-                          },
-                          child: const Text('Add'),
-                        ),
-                      ],
                     );
                   },
                 );
@@ -155,12 +157,14 @@ class _MyHomePageState extends State<MyHomePage> {
               if (state is AddfriendSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Friend Added!')));
+                context.read<AddfriendBloc>().add(ResetState());
               }
               if (state is AddfriendFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: const Text('User not found!'),
                   backgroundColor: Theme.of(context).colorScheme.onError,
                 ));
+                context.read<AddfriendBloc>().add(ResetState());
               }
             },
           ),

@@ -1,4 +1,4 @@
-import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic/auth_bloc/user_sign_in_bloc.dart';
 import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
 
@@ -78,7 +78,7 @@ class _MydrawerState extends State<Mydrawer> {
                 ),
                 ListTile(
                   onTap: () {
-                    context.read<AuthSignInBloc>().add(const SignOutRequired());
+                    context.read<UserSignInBloc>().add(const SignOutRequired());
                     context.read<FriendsBloc>().add(FriendLogout());
                   },
                   title: const Text("Log Out"),
