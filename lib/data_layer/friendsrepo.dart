@@ -14,32 +14,39 @@ class FriendsRepository implements FriendsInterface {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FriendsRepository({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
-
   @override
-  Stream<List<Friend>> getFriends() {
+  Stream<List<Friend>> getFriends() async* {
     try {
-      return _firestore
+      final friends = _firestore
           .collection('users')
           .doc(_auth.currentUser!.uid)
           .snapshots()
-          .map((snapshot) {
-        final friends = snapshot['friends'];
+          .map((event) => event.data()!['friends']);
 
-        if (friends == null) {
-          return [];
-        }
-        if (friends.isEmpty) {
-          return [];
-        }
+      final friendslist = friends.asyncMap((friendIds) async {
+        final friendDocs = await _firestore
+            .collection('users')
+            .where('uid',
+                whereIn: friendIds.map((friend) => friend['uid']).toList())
+            .get();
 
-        return (friends as List<dynamic>)
-            .map((doc) => Friend(
-                email: doc['email'] ?? '',
-                userId: doc['uid'] ?? '',
-                lastMessage: doc['lastMessage'] ?? '',
-                timestamp: doc['timestamp'] ?? ''))
-            .toList();
+        final friendsList = friendDocs.docs.map((doc) {
+          final friendData = doc.data();
+          friendData['lastMessage'] = friendIds
+              .firstWhere((element) => element['uid'] == doc.id)['lastMessage'];
+          friendData['timestamp'] = friendIds
+              .firstWhere((element) => element['uid'] == doc.id)['timestamp'];
+          // friendIds['lastMessage']; // Update lastMessage field
+          // friendData['timestamp'] = friendIds['timestamp'];
+          // Update timestamp field
+          return Friend.fromMap(friendData);
+        }).toList();
+
+        // Rest of the code...
+
+        return friendsList;
       });
+      yield* friendslist;
     } catch (e) {
       throw Exception(e);
     }

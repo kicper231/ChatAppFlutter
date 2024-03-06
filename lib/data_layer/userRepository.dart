@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 
 class UserRepository {
   //instance of auth
@@ -19,8 +17,7 @@ class UserRepository {
   //sing in
   Future<void> singIn(String email, String password) async {
     try {
-      UserCredential user = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       // _firestore.collection('users').doc(user.user!.uid).set({
       //   'email': email,
@@ -42,7 +39,7 @@ class UserRepository {
         'email': email,
         'uid': user.user!.uid,
         'friends': [],
-        'Image': ' ',
+        'Image': '',
       });
     } catch (e) {
       throw Exception(e);
@@ -67,7 +64,7 @@ class UserRepository {
           FirebaseStorage.instance.ref().child("$userId/PP/${userId}_photo");
       await firebaseStoreRef.putFile(imageFile);
       String url = await firebaseStoreRef.getDownloadURL();
-      await _firestore.collection('users').doc(userId).update({'picture': url});
+      await _firestore.collection('users').doc(userId).update({'Image': url});
       return url;
     } catch (e) {
       //  log(e.toString());

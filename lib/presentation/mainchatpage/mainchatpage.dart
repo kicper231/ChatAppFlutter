@@ -221,14 +221,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const CircleAvatar(
-                                    child: Icon(Icons.person),
+                                CircleAvatar(
+                                  radius: 30,
+                                  child: ClipOval(
+                                    child: state.friends[index].image == ""
+                                        ? const Icon(Icons.person)
+                                        : Image.network(
+                                            state.friends[index].image!,
+                                            fit: BoxFit.fill),
                                   ),
                                 ),
                                 Padding(
@@ -269,17 +269,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                            CircleAvatar(
+                              radius: 30,
+                              child: ClipOval(
+                                child: filtredFriends[index].image == ""
+                                    ? const Icon(Icons.person)
+                                    : Image.network(
+                                        filtredFriends[index].image!,
+                                        fit: BoxFit.fill),
                               ),
-                              child:
-                                  const CircleAvatar(child: Icon(Icons.person)),
                             ),
                             const SizedBox(
                               width: 10,
