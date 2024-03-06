@@ -4,21 +4,14 @@ This is a simple Flutter application that utilizes the BLoC state management pat
 
 ## Features
 
-- User-friendly interface :3
+- User-friendly interface
 - BLoC state management (like mmmv model)
 - Firebase database integration 
 - Add friends functionality
 - Real-time chat feature
-- 
 
-## Getting Started
+<img width="265" alt="home" src="https://github.com/kicper231/ChatAppFlutter/assets/128547863/59771e0f-1d4d-4f6d-a9ca-63135010df67">
 
-To get started with this app, follow these steps:
-
-1. Clone the repository.
-2. Open the project in your preferred Flutter development environment.
-3. Set up Firebase and configure the necessary credentials.
-4. Run the app on your preferred device or emulator.
 
 ## Dependencies
 
