@@ -1,5 +1,5 @@
 import 'package:chatapp/bussines_logic/addfriend_bloc/addfriend_bloc.dart';
-import 'package:chatapp/bussines_logic/auth_bloc/user_sign_in_bloc.dart';
+import 'package:chatapp/bussines_logic/auth_bloc/user_login_bloc.dart';
 
 import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
@@ -25,9 +25,9 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  // Providers
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(

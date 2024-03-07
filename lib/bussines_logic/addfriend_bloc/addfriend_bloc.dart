@@ -11,6 +11,7 @@ class AddfriendBloc extends Bloc<AddfriendEvent, AddfriendState> {
   AddfriendBloc({required this.friendsRepository}) : super(AddfriendInitial()) {
     on<AddfriendEvent>((event, emit) {});
 
+    // adding friend
     on<AddFriend>((event, emit) async {
       emit(AddfriendInProgress());
       try {
