@@ -1,23 +1,23 @@
 import 'package:bloc/bloc.dart';
-import 'package:chatapp/data_layer/userRepository.dart';
+import 'package:chatapp/data_layer_infrastructure/userRepository.dart';
 
 import 'package:equatable/equatable.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-part 'user_sign_in_event.dart';
-part 'user_sign_in_state.dart';
+part 'user_login_event.dart';
+part 'user_login_state.dart';
 
 class UserSignInBloc extends Bloc<UserSignInEvent, UserSignInState> {
-  final UserRepository _UserRepository;
+  final UserRepository _userRepository;
 
   UserSignInBloc({required UserRepository UserRepository})
-      : _UserRepository = UserRepository,
+      : _userRepository = UserRepository,
         super(UserSignInInitial()) {
     on<UserSignInRequired>((event, emit) async {
       emit(UserSignInProcess());
       try {
-        await _UserRepository.singIn(event.email, event.password);
+        await _userRepository.singIn(event.email, event.password);
         emit(UserSignInSuccess());
       } on FirebaseAuthException catch (e) {
         emit(UserSignInFailure(message: e.code));
@@ -26,14 +26,15 @@ class UserSignInBloc extends Bloc<UserSignInEvent, UserSignInState> {
       }
     });
     on<SignOutRequired>((event, emit) async {
-      await _UserRepository.signOut();
+      await _userRepository.signOut();
       emit(const UserSignInFailure());
     });
 
     on<UserSignUpRequired>((event, emit) async {
       emit(UserSignInProcess());
+
       try {
-        await _UserRepository.signup(event.email, event.password);
+        await _userRepository.signup(event.email, event.password);
         emit(UserSignInSuccess());
       } on FirebaseAuthException catch (e) {
         emit(UserSignInFailure(message: e.code));

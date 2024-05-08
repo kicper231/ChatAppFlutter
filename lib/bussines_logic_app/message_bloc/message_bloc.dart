@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:chatapp/data_layer/messagerepo.dart';
-import 'package:chatapp/data_layer/model/message.dart';
+import 'package:chatapp/data_layer_infrastructure/messagerepo.dart';
+import 'package:chatapp/models_domain/model/message.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:chatapp/data_layer/friendsrepo.dart';
-import 'package:chatapp/data_layer/model/friend.dart';
+import 'package:chatapp/data_layer_infrastructure/friends_repository.dart';
+import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:equatable/equatable.dart';
 
 part 'friends_bloc_event.dart';

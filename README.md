@@ -10,7 +10,10 @@ This is a simple Flutter application that utilizes the BLoC state management pat
 - Add friends functionality
 - Real-time chat feature
 
+
+
 <img width="265" alt="home" src="https://github.com/kicper231/ChatAppFlutter/assets/128547863/59771e0f-1d4d-4f6d-a9ca-63135010df67">
+
 
 
 ## Dependencies
