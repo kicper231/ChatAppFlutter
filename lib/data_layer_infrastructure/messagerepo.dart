@@ -1,5 +1,5 @@
-import 'package:chatapp/data_layer/model/friend.dart';
-import 'package:chatapp/data_layer/model/message.dart';
+import 'package:chatapp/models_domain/model/friend.dart';
+import 'package:chatapp/models_domain/model/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

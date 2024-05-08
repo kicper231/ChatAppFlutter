@@ -1,4 +1,5 @@
-import 'package:chatapp/data_layer/model/friend.dart';
+import 'package:chatapp/models_domain/model/friend.dart';
+import 'package:chatapp/models_domain/model/user_info.dart' as Info;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -17,38 +18,59 @@ class FriendsRepository implements FriendsInterface {
   @override
   Stream<List<Friend>> getFriends() async* {
     try {
-      final friends = _firestore
+      // pobranie znajomych
+      final friendsStream = _firestore
           .collection('users')
           .doc(_auth.currentUser!.uid)
           .snapshots()
-          .map((event) => event.data()!['friends']);
+          .map((event) => event.data()!['friends'] as List<dynamic>?);
 
-      final friendslist = friends.asyncMap((friendIds) async {
+      // obsluga znajomych
+      final friendsListStream = friendsStream.asyncMap((friendIds) async {
+        if (friendIds == null || friendIds.isEmpty) {
+          return List<Friend>.empty();
+        }
+
+        // zapytanie do
         final friendDocs = await _firestore
             .collection('users')
             .where('uid',
                 whereIn: friendIds.map((friend) => friend['uid']).toList())
             .get();
 
+        // przypisanie ostatnich znajomosci
         final friendsList = friendDocs.docs.map((doc) {
           final friendData = doc.data();
           friendData['lastMessage'] = friendIds
               .firstWhere((element) => element['uid'] == doc.id)['lastMessage'];
           friendData['timestamp'] = friendIds
               .firstWhere((element) => element['uid'] == doc.id)['timestamp'];
-          // friendIds['lastMessage']; // Update lastMessage field
-          // friendData['timestamp'] = friendIds['timestamp'];
-          // Update timestamp field
+
           return Friend.fromMap(friendData);
         }).toList();
 
-        // Rest of the code...
-
         return friendsList;
       });
-      yield* friendslist;
+
+      yield* friendsListStream;
     } catch (e) {
-      throw Exception(e);
+      throw Exception('Failed to fetch friends: ${e.toString()}');
+    }
+  }
+
+  Future<Info.UserInfo> getUserInfo() async {
+    try {
+      final userDoc = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .get();
+      final userData = userDoc.data();
+      if (userData == null) {
+        throw Exception('User not found');
+      }
+      return Info.UserInfo.fromMap(userData);
+    } catch (e) {
+      throw Exception('Failed to fetch user info: ${e.toString()}');
     }
   }
 

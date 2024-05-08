@@ -1,7 +1,7 @@
-import 'package:chatapp/bussines_logic/addfriend_bloc/addfriend_bloc.dart';
-import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
-import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
-import 'package:chatapp/data_layer/model/friend.dart';
+import 'package:chatapp/bussines_logic_app/add_friend_bloc/addfriend_bloc.dart';
+import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart';
+import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
+import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:chatapp/helper.dart';
 
 import 'package:chatapp/presentation/chatpage/chatpage.dart';

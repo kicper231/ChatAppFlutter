@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:chatapp/data_layer/friendsrepo.dart';
+import 'package:chatapp/data_layer_infrastructure/friends_repository.dart';
 import 'package:equatable/equatable.dart';
 
 part 'addfriend_event.dart';

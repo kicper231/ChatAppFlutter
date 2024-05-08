@@ -1,7 +1,7 @@
-import 'package:chatapp/bussines_logic/auth_bloc/user_login_bloc.dart';
-import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
-import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
-import 'package:chatapp/bussines_logic/update_user_data_bloc/update_user_data_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/auth_bloc/user_login_bloc.dart';
+import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/update_user_data_bloc/update_user_data_bloc_bloc.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
