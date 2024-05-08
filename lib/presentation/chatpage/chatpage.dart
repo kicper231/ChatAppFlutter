@@ -1,6 +1,6 @@
-import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
-import 'package:chatapp/data_layer/model/friend.dart';
-import 'package:chatapp/data_layer/model/message.dart';
+import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart';
+import 'package:chatapp/models_domain/model/friend.dart';
+import 'package:chatapp/models_domain/model/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

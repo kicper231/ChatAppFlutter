@@ -1,18 +1,24 @@
-import 'package:chatapp/bussines_logic/addfriend_bloc/addfriend_bloc.dart';
-import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
-import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
-import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
-import 'package:chatapp/bussines_logic/themebloc/themebloc_bloc.dart';
-import 'package:chatapp/data_layer/authrepo.dart';
-import 'package:chatapp/data_layer/friendsrepo.dart';
-import 'package:chatapp/data_layer/messagerepo.dart';
+import 'package:chatapp/bussines_logic_app/add_friend_bloc/addfriend_bloc.dart';
+import 'package:chatapp/bussines_logic_app/auth_bloc/user_login_bloc.dart';
+
+import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart';
+import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/update_user_data_bloc/update_user_data_bloc_bloc.dart';
+
+import 'package:chatapp/data_layer_infrastructure/friends_repository.dart';
+import 'package:chatapp/data_layer_infrastructure/messagerepo.dart';
+import 'package:chatapp/data_layer_infrastructure/userRepository.dart';
 import 'package:chatapp/firebase_options.dart';
 import 'package:chatapp/presentation/loginRegisterToggle.dart';
 import 'package:chatapp/presentation/mainchatpage/mainchatpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Main function
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,15 +27,15 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  // Providers
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (context) => AuthRepository(),
+          create: (context) => UserRepository(),
         ),
         RepositoryProvider(
           create: (context) => FriendsRepository(),
@@ -49,8 +55,8 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (context) => AddfriendBloc(
-              friendsRepository: context.read<FriendsRepository>(),
+            create: (context) => UserSignInBloc(
+              UserRepository: context.read<UserRepository>(),
             ),
           ),
         ],
@@ -137,9 +143,16 @@ class MyApp extends StatelessWidget {
                   if (snapshot.hasData) {
                     return MultiBlocProvider(
                       providers: [
+                        // BlocProvider(
+                        //   create: (context) => UserSignInBloc(
+                        //     UserRepository: context.read<UserRepository>(),
+                        //   ),
+                        // ),
+
                         BlocProvider(
-                          create: (context) => AuthSignInBloc(
-                            authRepository: context.read<AuthRepository>(),
+                          create: (context) => AddfriendBloc(
+                            friendsRepository:
+                                context.read<FriendsRepository>(),
                           ),
                         ),
                         BlocProvider(
@@ -154,19 +167,20 @@ class MyApp extends StatelessWidget {
                                 context.read<FriendsRepository>(),
                           ),
                         ),
-                        // BlocProvider(
-                        //   create: (context) => MessageBloc(
-                        //     messageRepository:
-                        //         context.read<MessageRepository>(),
-                        //   ),
-                        // ),
+                        BlocProvider(
+                          create: (context) => UpdateUserDataBloc(
+                            userRepository: context.read<UserRepository>(),
+                          ),
+                        ),
                       ],
-                      child: const MyHomePage(title: "Chats"),
+                      child: Builder(builder: (context) {
+                        return const MyHomePage(title: "Chats");
+                      }),
                     );
                   } else {
                     return BlocProvider(
-                      create: (context) => AuthSignInBloc(
-                        authRepository: context.read<AuthRepository>(),
+                      create: (context) => UserSignInBloc(
+                        UserRepository: context.read<UserRepository>(),
                       ),
                       child: const LoginRegister(),
                     );

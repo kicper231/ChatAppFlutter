@@ -24,7 +24,8 @@ class Message {
     };
   }
 
-  factory Message.fromMap(Map<String, dynamic> map) {
+  /// ewentualnie metoda fabryczna do tworzenia obiektow
+  static Message fromMap(Map<String, dynamic> map) {
     return Message(
         senderId: map['senderId'],
         senderEmail: map['senderEmail'],

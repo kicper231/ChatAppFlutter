@@ -1,4 +1,4 @@
-import 'package:chatapp/bussines_logic/auth_bloc/auth_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/auth_bloc/user_login_bloc.dart';
 
 import 'package:chatapp/presentation/components/textfield.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +63,7 @@ class RegisterPage extends StatelessWidget {
                 onPressed: () {
                   if (_emailControler.text.isNotEmpty &&
                       _passwordControler.text.isNotEmpty) {
-                    context.read<AuthSignInBloc>().add(AuthSignUpRequired(
+                    context.read<UserSignInBloc>().add(UserSignUpRequired(
                         email: _emailControler.text,
                         password: _passwordControler.text));
                   }

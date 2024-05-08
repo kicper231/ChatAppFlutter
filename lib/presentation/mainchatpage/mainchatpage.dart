@@ -1,7 +1,7 @@
-import 'package:chatapp/bussines_logic/addfriend_bloc/addfriend_bloc.dart';
-import 'package:chatapp/bussines_logic/message_bloc/message_bloc.dart';
-import 'package:chatapp/bussines_logic/friends_bloc/friends_bloc_bloc.dart';
-import 'package:chatapp/data_layer/model/friend.dart';
+import 'package:chatapp/bussines_logic_app/add_friend_bloc/addfriend_bloc.dart';
+import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart';
+import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
+import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:chatapp/helper.dart';
 
 import 'package:chatapp/presentation/chatpage/chatpage.dart';
@@ -78,38 +78,40 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Add Friend'),
-                      content: TextField(
-                        controller: addfriendController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter nickname',
+                  builder: (BuildContext dialogContext) {
+                    return BlocProvider<AddfriendBloc>.value(
+                      value: BlocProvider.of<AddfriendBloc>(context),
+                      child: AlertDialog(
+                        title: const Text('Add Friend'),
+                        content: TextField(
+                          controller: addfriendController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter nickname',
+                          ),
                         ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(dialogContext).pop();
+                              addfriendController.clear();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<AddfriendBloc>()
+                                  .add(AddFriend(id: addfriendController.text));
+                              Navigator.of(dialogContext).pop();
+                              addfriendController.clear();
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //     const SnackBar(content: Text('Friends Request Sent!')));
+                              // Navigator.of(context).pop();
+                            },
+                            child: const Text('Add'),
+                          ),
+                        ],
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            addfriendController.clear();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            context
-                                .read<AddfriendBloc>()
-                                .add(AddFriend(id: addfriendController.text));
-                            Navigator.of(context).pop();
-                            addfriendController.clear();
-                            // ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(
-                            //         content: Text('Friends Request Sent!')));
-                            //   Navigator.of(context).pop();
-                          },
-                          child: const Text('Add'),
-                        ),
-                      ],
                     );
                   },
                 );
@@ -155,12 +157,14 @@ class _MyHomePageState extends State<MyHomePage> {
               if (state is AddfriendSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Friend Added!')));
+                context.read<AddfriendBloc>().add(ResetState());
               }
               if (state is AddfriendFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: const Text('User not found!'),
                   backgroundColor: Theme.of(context).colorScheme.onError,
                 ));
+                context.read<AddfriendBloc>().add(ResetState());
               }
             },
           ),
@@ -217,14 +221,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const CircleAvatar(
-                                    child: Icon(Icons.person),
+                                CircleAvatar(
+                                  radius: 30,
+                                  child: ClipOval(
+                                    child: state.friends[index].image == ""
+                                        ? const Icon(Icons.person)
+                                        : Image.network(
+                                            state.friends[index].image!,
+                                            fit: BoxFit.fill),
                                   ),
                                 ),
                                 Padding(
@@ -265,17 +269,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                            CircleAvatar(
+                              radius: 30,
+                              child: ClipOval(
+                                child: filtredFriends[index].image == ""
+                                    ? const Icon(Icons.person)
+                                    : Image.network(
+                                        filtredFriends[index].image!,
+                                        fit: BoxFit.fill),
                               ),
-                              child:
-                                  const CircleAvatar(child: Icon(Icons.person)),
                             ),
                             const SizedBox(
                               width: 10,

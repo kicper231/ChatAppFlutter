@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:chatapp/data_layer/friendsrepo.dart';
+import 'package:chatapp/data_layer_infrastructure/friends_repository.dart';
 import 'package:equatable/equatable.dart';
 
 part 'addfriend_event.dart';
@@ -11,6 +11,7 @@ class AddfriendBloc extends Bloc<AddfriendEvent, AddfriendState> {
   AddfriendBloc({required this.friendsRepository}) : super(AddfriendInitial()) {
     on<AddfriendEvent>((event, emit) {});
 
+    // adding friend
     on<AddFriend>((event, emit) async {
       emit(AddfriendInProgress());
       try {
@@ -20,6 +21,10 @@ class AddfriendBloc extends Bloc<AddfriendEvent, AddfriendState> {
       } catch (e) {
         emit(AddfriendFailure());
       }
+    });
+
+    on<ResetState>((event, emit) {
+      emit(AddfriendInitial());
     });
   }
 }
