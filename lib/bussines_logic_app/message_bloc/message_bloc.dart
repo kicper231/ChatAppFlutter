@@ -6,10 +6,12 @@ import 'package:chatapp/models_domain/model/message.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 
 part 'message_event.dart';
 part 'message_state.dart';
 
+@singleton
 class MessageBloc extends Bloc<MessageEvent, MessageState> {
   late final MessageRepository _messageRepository;
   String fromuser = '';
@@ -19,8 +21,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   late StreamSubscription? _messageSubscription;
   late Stream<List<Message>> messages;
   MessageBloc({
-    MessageRepository? messageRepository,
-  })  : _messageRepository = messageRepository ?? MessageRepository(),
+    required MessageRepository messageRepository,
+  })  : _messageRepository = messageRepository,
         super(MessageInitial()) {
     // messages = _messageRepository.getMessages(touser);
 

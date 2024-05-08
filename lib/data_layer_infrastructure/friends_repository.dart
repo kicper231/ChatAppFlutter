@@ -2,20 +2,21 @@ import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:chatapp/models_domain/model/user_info.dart' as Info;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 
-abstract class FriendsInterface {
-  Stream<List<Friend>> getFriends();
-  // Future<void> addFriend(User friend);
-  // Future<void> removeFriend(User friend);
-  void addFriend(String userId);
-}
+// abstract class FriendsInterface {
+//   Stream<List<Friend>> getFriends();
+//   // Future<void> addFriend(User friend);
+//   // Future<void> removeFriend(User friend);
+//   void addFriend(String userId);
+// }
 
-class FriendsRepository implements FriendsInterface {
-  final FirebaseFirestore _firestore;
+@singleton
+class FriendsRepository {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  FriendsRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
-  @override
+  FriendsRepository();
+
   Stream<List<Friend>> getFriends() async* {
     try {
       // pobranie znajomych
@@ -58,7 +59,7 @@ class FriendsRepository implements FriendsInterface {
     }
   }
 
-  Future<Info.UserInfo> getUserInfo() async {
+  Future<Info.UserData> getUserData() async {
     try {
       final userDoc = await _firestore
           .collection('users')
@@ -68,13 +69,12 @@ class FriendsRepository implements FriendsInterface {
       if (userData == null) {
         throw Exception('User not found');
       }
-      return Info.UserInfo.fromMap(userData);
+      return Info.UserData.fromMap(userData);
     } catch (e) {
       throw Exception('Failed to fetch user info: ${e.toString()}');
     }
   }
 
-  @override
   Future<void> addFriend(String userEmail) async {
     try {
       final userRef = await _firestore

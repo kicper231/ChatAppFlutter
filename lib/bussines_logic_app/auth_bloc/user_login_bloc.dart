@@ -4,10 +4,12 @@ import 'package:chatapp/data_layer_infrastructure/userRepository.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 
 part 'user_login_event.dart';
 part 'user_login_state.dart';
 
+@singleton
 class UserSignInBloc extends Bloc<UserSignInEvent, UserSignInState> {
   final UserRepository _userRepository;
 

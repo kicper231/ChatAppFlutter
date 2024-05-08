@@ -3,15 +3,13 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:injectable/injectable.dart';
 
+@singleton
 class UserRepository {
   //instance of auth
-  final FirebaseAuth _auth;
-  final FirebaseFirestore _firestore;
-
-  UserRepository({FirebaseAuth? auth, FirebaseFirestore? firebase})
-      : _auth = auth ?? FirebaseAuth.instance,
-        _firestore = firebase ?? FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   //sing in
   Future<void> singIn(String email, String password) async {

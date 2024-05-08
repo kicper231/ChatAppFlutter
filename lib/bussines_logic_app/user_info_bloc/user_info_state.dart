@@ -12,7 +12,7 @@ final class UserInfoInitial extends UserInfoState {}
 final class UserInfoLoading extends UserInfoState {}
 
 final class UserInfoLoaded extends UserInfoState {
-  final UserInfo user;
+  final UserData user;
   const UserInfoLoaded({required this.user});
   @override
   List<Object> get props => [user];

@@ -1,18 +1,27 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 
 part 'themebloc_event.dart';
 part 'themebloc_state.dart';
 
+@singleton
 class ThemeblocBloc extends Bloc<ThemeblocEvent, ThemeblocState> {
-  ThemeMode actualTheme;
+  late ThemeService actualTheme;
 
-  ThemeblocBloc({required this.actualTheme}) : super(ThemeState(actualTheme)) {
+  ThemeblocBloc({required ThemeService actualTheme})
+      : super(ThemeState(actualTheme.currentTheme)) {
     on<ThemeChange>((event, emit) {
-      actualTheme =
-          actualTheme == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-      emit(ThemeState(actualTheme));
+      actualTheme.currentTheme = actualTheme.currentTheme == ThemeMode.light
+          ? ThemeMode.dark
+          : ThemeMode.light;
+      emit(ThemeState(actualTheme.currentTheme));
     });
   }
+}
+
+@singleton
+class ThemeService {
+  ThemeMode currentTheme = ThemeMode.light;
 }

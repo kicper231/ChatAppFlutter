@@ -1,18 +1,18 @@
-class UserInfo {
+class UserData {
   final String userId;
   final String email;
   final String? name;
   String? image;
 
-  UserInfo({
+  UserData({
     required this.userId,
     required this.email,
     this.name,
     this.image,
   });
 
-  static UserInfo fromMap(Map<String, dynamic> map) {
-    return UserInfo(
+  static UserData fromMap(Map<String, dynamic> map) {
+    return UserData(
       userId: map['uid'],
       email: map['email'],
       name: map['name'],
@@ -20,12 +20,12 @@ class UserInfo {
     );
   }
 
-  static Map<String, dynamic> toMap(UserInfo userInfo) {
+  static Map<String, dynamic> toMap(UserData UserData) {
     return {
-      'uid': userInfo.userId,
-      'email': userInfo.email,
-      'name': userInfo.name,
-      'Image': userInfo.image,
+      'uid': UserData.userId,
+      'email': UserData.email,
+      'name': UserData.name,
+      'Image': UserData.image,
     };
   }
 }
