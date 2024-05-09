@@ -3,6 +3,7 @@ import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/update_user_data_bloc/update_user_data_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +112,7 @@ class _MydrawerState extends State<Mydrawer> {
             child: Column(
               children: [
                 ListTile(
-                  title: const Text("Dark Mode"),
+                  title: Text("Dark Mode".tr()),
                   leading: const Icon(Icons.lightbulb_outline),
                   trailing: Switch(
                     value: isLightMode,
@@ -128,7 +129,7 @@ class _MydrawerState extends State<Mydrawer> {
                     Navigator.of(context).pop();
                   },
                   leading: const Icon(Icons.home),
-                  title: const Text('Home'),
+                  title: Text('Home'.tr()),
                 ),
                 ListTile(
                   onTap: () {
@@ -138,14 +139,14 @@ class _MydrawerState extends State<Mydrawer> {
                     }));
                   },
                   leading: const Icon(Icons.settings),
-                  title: const Text('Language Settings'),
+                  title: Text('Language Settings'.tr()),
                 ),
                 ListTile(
                   onTap: () {
                     context.read<UserSignInBloc>().add(const SignOutRequired());
                     context.read<FriendsBloc>().add(FriendLogout());
                   },
-                  title: const Text("Log Out"),
+                  title: Text("Log out".tr()),
                   leading: const Icon(Icons.exit_to_app),
                 ),
                 const Spacer(),

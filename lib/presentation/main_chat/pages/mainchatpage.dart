@@ -1,13 +1,13 @@
 import 'package:chatapp/bussines_logic_app/add_friend_bloc/addfriend_bloc.dart';
 import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
-import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart';
+
 import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:chatapp/models_domain/helper.dart';
 
 import 'package:chatapp/presentation/chat_page/chatpage.dart';
 import 'package:chatapp/presentation/main_chat/componets/drawer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/cupertino.dart';
 
@@ -70,12 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
         scrolledUnderElevation: 0,
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
-          // IconButton(
-          //     onPressed: () {},
-          //     icon: Icon(
-          //       CupertinoIcons.pen,
-          //       color: Theme.of(context).colorScheme.onBackground,
-          //     )),
           IconButton(
               onPressed: () {
                 showDialog(
@@ -84,11 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     return BlocProvider<AddfriendBloc>.value(
                       value: BlocProvider.of<AddfriendBloc>(context),
                       child: AlertDialog(
-                        title: const Text('Add Friend'),
+                        title: Text('Add friend'.tr()),
                         content: TextField(
                           controller: addfriendController,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter nickname',
+                          decoration: InputDecoration(
+                            hintText: 'Enter email'.tr(),
                           ),
                         ),
                         actions: [
@@ -97,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.of(dialogContext).pop();
                               addfriendController.clear();
                             },
-                            child: const Text('Cancel'),
+                            child: Text('Cancel'.tr()),
                           ),
                           TextButton(
                             onPressed: () {
@@ -110,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               //     const SnackBar(content: Text('Friends Request Sent!')));
                               // Navigator.of(context).pop();
                             },
-                            child: const Text('Add'),
+                            child: Text('Add'.tr()),
                           ),
                         ],
                       ),
@@ -205,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             )
                           : null,
-                      hintText: "Search",
+                      hintText: "Search".tr(),
                       border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(40))),
                     )),

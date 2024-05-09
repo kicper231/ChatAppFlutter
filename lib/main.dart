@@ -43,6 +43,9 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeblocBloc, ThemeblocState>(
         builder: (context, state) {
           return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             themeMode: state.actualTheme,
             darkTheme: DarkTheme.theme,
             theme: LightTheme.theme,
@@ -52,7 +55,7 @@ class MyApp extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Builder(builder: (context) {
-                    return const MyHomePage(title: "Chats");
+                    return MyHomePage(title: "Chats".tr());
                   });
                 } else {
                   return BlocProvider(

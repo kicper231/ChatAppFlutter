@@ -8,28 +8,25 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('settings'.tr()),
+        title: Text('Settings'.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: <Widget>[
+            const Divider(),
             ListTile(
-              onTap: () => context.setLocale(Locale('en', 'US')),
-              title: Text('english'.tr()),
-              leading: Icon(Icons.language),
+              onTap: () => context.setLocale(const Locale('pl', 'PL')),
+              title: Text('Polish'.tr()),
+              leading: const Icon(Icons.language),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              onTap: () => context.setLocale(Locale('de', 'DE')),
-              title: Text('german'.tr()),
-              leading: Icon(Icons.language),
+              onTap: () => context.setLocale(const Locale('en', 'US')),
+              title: Text('English'.tr()),
+              leading: const Icon(Icons.language),
             ),
-            Divider(),
-            ListTile(
-              title: Text(
-                  'current_locale'.tr(args: [context.locale.languageCode])),
-            ),
+            const Divider(),
           ],
         ),
       ),
