@@ -2,12 +2,14 @@ import 'package:chatapp/bussines_logic_app/auth_bloc/user_login_bloc.dart';
 import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/update_user_data_bloc/update_user_data_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:chatapp/presentation/main_chat/componets/languagesettings.dart';
 
 class Mydrawer extends StatefulWidget {
   const Mydrawer({super.key});
@@ -17,7 +19,15 @@ class Mydrawer extends StatefulWidget {
 }
 
 class _MydrawerState extends State<Mydrawer> {
+  String? url;
   bool isLightMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserInfoBloc>().add(const GetUserInfo());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -67,10 +77,21 @@ class _MydrawerState extends State<Mydrawer> {
                       }
                     }
                   },
-                  child: const CircleAvatar(
-                    radius: 50.0,
-
-                    child: Icon(Icons.person), // Placeholder icon
+                  child: BlocListener<UserInfoBloc, UserInfoState>(
+                    listener: (context, state) {
+                      if (state is UserInfoLoaded) {
+                        setState(() {
+                          url = state.user.image;
+                        });
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 50.0,
+                      child: url == null
+                          ? const Icon(Icons.person)
+                          : ClipOval(
+                              child: Image.network(url!, fit: BoxFit.cover)),
+                    ),
                   ),
                 ),
                 Padding(
@@ -110,7 +131,12 @@ class _MydrawerState extends State<Mydrawer> {
                   title: const Text('Home'),
                 ),
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const SettingScreen();
+                    }));
+                  },
                   leading: const Icon(Icons.settings),
                   title: const Text('Language Settings'),
                 ),

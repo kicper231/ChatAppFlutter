@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:chatapp/data_layer_infrastructure/messagerepo.dart';
+import 'package:chatapp/data_layer_infrastructure/message_repository.dart';
 import 'package:chatapp/models_domain/model/message.dart';
 
 import 'package:equatable/equatable.dart';

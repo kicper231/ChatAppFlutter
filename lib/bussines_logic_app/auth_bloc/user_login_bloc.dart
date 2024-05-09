@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:chatapp/data_layer_infrastructure/userRepository.dart';
+import 'package:chatapp/data_layer_infrastructure/user_repository.dart';
 
 import 'package:equatable/equatable.dart';
 

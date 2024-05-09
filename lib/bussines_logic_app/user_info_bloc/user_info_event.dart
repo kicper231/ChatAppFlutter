@@ -8,8 +8,7 @@ sealed class UserInfoEvent extends Equatable {
 }
 
 class GetUserInfo extends UserInfoEvent {
-  final String userId;
-  const GetUserInfo(this.userId);
+  const GetUserInfo();
   @override
-  List<Object> get props => [userId];
+  List<Object> get props => [];
 }

@@ -1,11 +1,13 @@
 import 'package:chatapp/bussines_logic_app/add_friend_bloc/addfriend_bloc.dart';
 import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart';
 import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:chatapp/models_domain/helper.dart';
 
-import 'package:chatapp/presentation/chatpage/chatpage.dart';
-import 'package:chatapp/presentation/mainchatpage/drawer.dart';
+import 'package:chatapp/presentation/chat_page/chatpage.dart';
+import 'package:chatapp/presentation/main_chat/componets/drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 

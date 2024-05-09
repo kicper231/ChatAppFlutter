@@ -6,9 +6,11 @@ import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart';
 import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/update_user_data_bloc/update_user_data_bloc_bloc.dart';
+import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart';
 import 'package:chatapp/data_layer_infrastructure/friends_repository.dart';
-import 'package:chatapp/data_layer_infrastructure/userRepository.dart';
+import 'package:chatapp/data_layer_infrastructure/user_repository.dart';
 import 'package:chatapp/di.config.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,6 +61,11 @@ class GlobalBlocProviders extends StatelessWidget {
         BlocProvider(
           create: (context) => UpdateUserDataBloc(
             userRepository: getIt<UserRepository>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => UserInfoBloc(
+            getIt<FriendsRepository>(),
           ),
         ),
       ],

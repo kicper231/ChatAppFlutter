@@ -23,8 +23,9 @@ import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart'
 import 'package:chatapp/data_layer_infrastructure/firebase_module.dart' as _i15;
 import 'package:chatapp/data_layer_infrastructure/friends_repository.dart'
     as _i7;
-import 'package:chatapp/data_layer_infrastructure/messagerepo.dart' as _i8;
-import 'package:chatapp/data_layer_infrastructure/userRepository.dart' as _i9;
+import 'package:chatapp/data_layer_infrastructure/message_repository.dart'
+    as _i8;
+import 'package:chatapp/data_layer_infrastructure/user_repository.dart' as _i9;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i5;
 import 'package:firebase_auth/firebase_auth.dart' as _i4;
 import 'package:firebase_core/firebase_core.dart' as _i3;

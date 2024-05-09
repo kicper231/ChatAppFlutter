@@ -17,7 +17,9 @@ class UserSignInRequired extends UserSignInEvent {
 class UserSignUpRequired extends UserSignInEvent {
   final String email;
   final String password;
-  const UserSignUpRequired({required this.email, required this.password});
+  final String name;
+  const UserSignUpRequired(
+      {required this.email, required this.password, required this.name});
 }
 
 class SignOutRequired extends UserSignInEvent {
