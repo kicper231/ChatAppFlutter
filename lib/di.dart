@@ -10,7 +10,6 @@ import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart';
 import 'package:chatapp/data_layer_infrastructure/friends_repository.dart';
 import 'package:chatapp/data_layer_infrastructure/user_repository.dart';
 import 'package:chatapp/di.config.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,13 +34,7 @@ class GlobalBlocProviders extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<ThemeblocBloc>(),
-        ),
-        BlocProvider(
           create: (context) => getIt<MessageBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<UserSignInBloc>(),
         ),
         BlocProvider(
           create: (context) => AddfriendBloc(

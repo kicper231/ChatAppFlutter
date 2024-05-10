@@ -3,6 +3,7 @@ import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/update_user_data_bloc/update_user_data_bloc_bloc.dart';
 import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart';
+import 'package:chatapp/presentation/main_chat/pages/information.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +21,7 @@ class Mydrawer extends StatefulWidget {
 }
 
 class _MydrawerState extends State<Mydrawer> {
-  String? url;
+  String? url = '';
   bool isLightMode = false;
 
   @override
@@ -88,7 +89,7 @@ class _MydrawerState extends State<Mydrawer> {
                     },
                     child: CircleAvatar(
                       radius: 50.0,
-                      child: url == null
+                      child: url == ''
                           ? const Icon(Icons.person)
                           : ClipOval(
                               child: Image.network(url!, fit: BoxFit.cover)),
@@ -126,7 +127,10 @@ class _MydrawerState extends State<Mydrawer> {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.of(context).pop();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const InformationPage();
+                    }));
                   },
                   leading: const Icon(Icons.home),
                   title: Text('Home'.tr()),

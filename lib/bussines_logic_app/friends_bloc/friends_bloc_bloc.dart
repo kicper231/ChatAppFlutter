@@ -9,10 +9,9 @@ import 'package:injectable/injectable.dart';
 part 'friends_bloc_event.dart';
 part 'friends_bloc_state.dart';
 
-@singleton
 class FriendsBloc extends Bloc<FriendsBlocEvent, FriendsBlocState> {
   final FriendsRepository _friendsRepository;
-  late final Stream<List<Friend>> friends;
+  late Stream<List<Friend>> friends;
   StreamSubscription<List<Friend>>? friendsSubscription;
 
   FriendsBloc({required FriendsRepository friendsRepository})
@@ -21,22 +20,18 @@ class FriendsBloc extends Bloc<FriendsBlocEvent, FriendsBlocState> {
     friends = _friendsRepository.getFriends();
     friendsSubscription = friends.listen((friendsList) {
       if (friendsSubscription != null) {
-        add(FriendListChange(friends: friendsList));
+        emit(FriendsBlocLoaded(friends: friendsList));
       }
     });
 
-    on<FriendListChange>((event, emit) {
-      emit(FriendsBlocLoaded(friends: event.friends));
-    });
-
     on<GetFriendList>((event, emit) {
-      friends = _friendsRepository.getFriends();
       emit(FriendsBlocLoaded(friends: friends as List<Friend>));
     });
 
     on<FriendLogout>((event, emit) {
       friendsSubscription?.cancel();
       friendsSubscription = null;
+      friends = const Stream.empty();
       emit(FriendsBlocInitial());
     });
   }

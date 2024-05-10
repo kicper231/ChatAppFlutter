@@ -39,7 +39,15 @@ class MyApp extends StatelessWidget {
   // Providers
   @override
   Widget build(BuildContext context) {
-    return GlobalBlocProviders(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ThemeblocBloc(actualTheme: ThemeService()),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UserSignInBloc>(),
+        ),
+      ],
       child: BlocBuilder<ThemeblocBloc, ThemeblocState>(
         builder: (context, state) {
           return MaterialApp(
@@ -55,7 +63,8 @@ class MyApp extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Builder(builder: (context) {
-                    return MyHomePage(title: "Chats".tr());
+                    return GlobalBlocProviders(
+                        child: MyHomePage(title: "Chats".tr()));
                   });
                 } else {
                   return BlocProvider(

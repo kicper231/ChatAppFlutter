@@ -6,13 +6,14 @@ import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:chatapp/models_domain/helper.dart';
 
 import 'package:chatapp/presentation/chat_page/chatpage.dart';
-import 'package:chatapp/presentation/main_chat/componets/drawer.dart';
+import 'package:chatapp/presentation/main_chat/pages/drawer.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -22,6 +23,8 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
+final GetIt getIt = GetIt.instance;
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isLightMode = true;
@@ -43,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _focusNode = FocusNode();
     searchControler.addListener(_onSearchChanged);
+    context.read<FriendsBloc>().add(GetFriendList());
   }
 
   void _onSearchChanged() {
@@ -98,6 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               context
                                   .read<AddfriendBloc>()
                                   .add(AddFriend(id: addfriendController.text));
+
+                              context.read<FriendsBloc>().add(GetFriendList());
                               Navigator.of(dialogContext).pop();
                               addfriendController.clear();
                               // ScaffoldMessenger.of(context).showSnackBar(
@@ -248,57 +254,67 @@ class _MyHomePageState extends State<MyHomePage> {
                   scrollDirection: Axis.vertical,
                   itemCount: filtredFriends.length,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        context.read<MessageBloc>().add(EnterChat(
-                            userToEnter: filtredFriends[index].userId));
+                    return BlocProvider(
+                      create: (context) => getIt<MessageBloc>(),
+                      child: GestureDetector(
+                        onTap: () {
+                          context.read<MessageBloc>().add(EnterChat(
+                              userToEnter: filtredFriends[index].userId));
 
-                        Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ChatPage(
-                                receiver: filtredFriends[index],
-                              ),
-                            ));
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              child: ClipOval(
-                                child: filtredFriends[index].image == ""
-                                    ? const Icon(Icons.person)
-                                    : Image.network(
-                                        filtredFriends[index].image!,
-                                        fit: BoxFit.fill),
+                              builder: (context) => BlocProvider.value(
+                                value: getIt<MessageBloc>(),
+                                child: ChatPage(
+                                  receiver: filtredFriends[index],
+                                ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(filtredFriends[index].email,
-                                      style: const TextStyle(fontSize: 16)),
-                                  Row(
-                                    children: [
-                                      Text(filtredFriends[index].lastMessage!,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 12)),
-                                      const Text('  '),
-                                      Text(
-                                          formatTimestamp(
-                                              filtredFriends[index].timestamp!),
-                                          style: const TextStyle(fontSize: 12)),
-                                    ],
-                                  ),
-                                ]),
-                          ],
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                child: ClipOval(
+                                  child: filtredFriends[index].image == ""
+                                      ? const Icon(Icons.person)
+                                      : Image.network(
+                                          filtredFriends[index].image!,
+                                          fit: BoxFit.fill),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(filtredFriends[index].email,
+                                        style: const TextStyle(fontSize: 16)),
+                                    Row(
+                                      children: [
+                                        Text(filtredFriends[index].lastMessage!,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                const TextStyle(fontSize: 12)),
+                                        const Text('  '),
+                                        Text(
+                                            formatTimestamp(
+                                                filtredFriends[index]
+                                                    .timestamp!),
+                                            style:
+                                                const TextStyle(fontSize: 12)),
+                                      ],
+                                    ),
+                                  ]),
+                            ],
+                          ),
                         ),
                       ),
                     );

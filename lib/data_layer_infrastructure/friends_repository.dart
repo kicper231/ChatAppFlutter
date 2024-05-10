@@ -91,23 +91,24 @@ class FriendsRepository {
           .collection('users')
           .where('email', isEqualTo: userEmail)
           .get()
-          .then((value) => value.docs[0]['id']);
+          .then((value) => value.docs[0]['uid']);
 // zmien to pózniej na mape
-      String name = await _firestore
-          .collection('users')
-          .where('email', isEqualTo: userEmail)
-          .get()
-          .then((value) => value.docs[0]['name']);
+      // String name = await _firestore
+      //     .collection('users')
+      //     .where('email', isEqualTo: userEmail)
+      //     .get()
+      //     .then((value) => value.docs[0]['name']);
 
       if (userId == '') {
         throw Exception('User not found');
       }
       // stworzenie dwóch
-      Friend newFriend = Friend(email: userEmail, userId: userId, name: name);
+      Friend newFriend =
+          Friend(email: userEmail, userId: userId, name: 'basicname');
       Friend newFriendtwo = Friend(
           email: _auth.currentUser!.email!,
           userId: _auth.currentUser!.uid,
-          name: name);
+          name: 'basicName');
 
       await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
         'friends': FieldValue.arrayUnion([newFriend.toMap()]),

@@ -9,17 +9,17 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:chatapp/bussines_logic_app/add_friend_bloc/addfriend_bloc.dart'
-    as _i11;
-import 'package:chatapp/bussines_logic_app/auth_bloc/user_login_bloc.dart'
-    as _i13;
-import 'package:chatapp/bussines_logic_app/friends_bloc/friends_bloc_bloc.dart'
     as _i12;
+import 'package:chatapp/bussines_logic_app/auth_bloc/user_login_bloc.dart'
+    as _i10;
 import 'package:chatapp/bussines_logic_app/message_bloc/message_bloc.dart'
     as _i14;
 import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart'
     as _i6;
+import 'package:chatapp/bussines_logic_app/update_user_data_bloc/update_user_data_bloc_bloc.dart'
+    as _i13;
 import 'package:chatapp/bussines_logic_app/user_info_bloc/user_info_bloc.dart'
-    as _i10;
+    as _i11;
 import 'package:chatapp/data_layer_infrastructure/firebase_module.dart' as _i15;
 import 'package:chatapp/data_layer_infrastructure/friends_repository.dart'
     as _i7;
@@ -54,16 +54,16 @@ extension GetItInjectableX on _i1.GetIt {
     gh.singleton<_i7.FriendsRepository>(() => _i7.FriendsRepository());
     gh.singleton<_i8.MessageRepository>(() => _i8.MessageRepository());
     gh.singleton<_i9.UserRepository>(() => _i9.UserRepository());
-    gh.singleton<_i10.UserInfoBloc>(
-        () => _i10.UserInfoBloc(gh<_i7.FriendsRepository>()));
+    gh.singleton<_i10.UserSignInBloc>(
+        () => _i10.UserSignInBloc(UserRepository: gh<_i9.UserRepository>()));
+    gh.singleton<_i11.UserInfoBloc>(
+        () => _i11.UserInfoBloc(gh<_i7.FriendsRepository>()));
     gh.singleton<_i6.ThemeblocBloc>(
         () => _i6.ThemeblocBloc(actualTheme: gh<_i6.ThemeService>()));
-    gh.singleton<_i11.AddfriendBloc>(() =>
-        _i11.AddfriendBloc(friendsRepository: gh<_i7.FriendsRepository>()));
-    gh.singleton<_i12.FriendsBloc>(
-        () => _i12.FriendsBloc(friendsRepository: gh<_i7.FriendsRepository>()));
-    gh.singleton<_i13.UserSignInBloc>(
-        () => _i13.UserSignInBloc(UserRepository: gh<_i9.UserRepository>()));
+    gh.singleton<_i12.AddfriendBloc>(() =>
+        _i12.AddfriendBloc(friendsRepository: gh<_i7.FriendsRepository>()));
+    gh.singleton<_i13.UpdateUserDataBloc>(() =>
+        _i13.UpdateUserDataBloc(userRepository: gh<_i9.UserRepository>()));
     gh.singleton<_i14.MessageBloc>(
         () => _i14.MessageBloc(messageRepository: gh<_i8.MessageRepository>()));
     return this;
