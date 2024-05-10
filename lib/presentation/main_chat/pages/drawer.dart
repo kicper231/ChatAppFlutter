@@ -9,6 +9,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:chatapp/presentation/main_chat/componets/languagesettings.dart';
@@ -32,143 +33,153 @@ class _MydrawerState extends State<Mydrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            height: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? image = await picker.pickImage(
-                        source: ImageSource.gallery,
-                        maxHeight: 500,
-                        maxWidth: 500,
-                        imageQuality: 40);
-                    if (image != null) {
-                      CroppedFile? croppedFile = await ImageCropper().cropImage(
-                        sourcePath: image.path,
-                        aspectRatio:
-                            const CropAspectRatio(ratioX: 1, ratioY: 1),
-                        aspectRatioPresets: [CropAspectRatioPreset.square],
-                        uiSettings: [
-                          AndroidUiSettings(
-                              toolbarTitle: 'Cropper',
-                              toolbarColor:
-                                  Theme.of(context).colorScheme.primary,
-                              toolbarWidgetColor: Colors.white,
-                              initAspectRatio: CropAspectRatioPreset.original,
-                              lockAspectRatio: false),
-                          IOSUiSettings(
-                            title: 'Cropper',
-                          ),
-                        ],
-                      );
-                      if (croppedFile != null) {
-                        context.read<UpdateUserDataBloc>().add(UploadPicture(
-                            croppedFile.path,
-                            FirebaseAuth.instance.currentUser!.uid));
+    return BlocListener<UserSignInBloc, UserSignInState>(
+      listener: (context, state) {
+        if (state is UserSignOutSuccess) {
+          context.go('/login');
+        }
+      },
+      child: Drawer(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      final ImagePicker picker = ImagePicker();
+                      final XFile? image = await picker.pickImage(
+                          source: ImageSource.gallery,
+                          maxHeight: 500,
+                          maxWidth: 500,
+                          imageQuality: 40);
+                      if (image != null) {
+                        CroppedFile? croppedFile =
+                            await ImageCropper().cropImage(
+                          sourcePath: image.path,
+                          aspectRatio:
+                              const CropAspectRatio(ratioX: 1, ratioY: 1),
+                          aspectRatioPresets: [CropAspectRatioPreset.square],
+                          uiSettings: [
+                            AndroidUiSettings(
+                                toolbarTitle: 'Cropper',
+                                toolbarColor:
+                                    Theme.of(context).colorScheme.primary,
+                                toolbarWidgetColor: Colors.white,
+                                initAspectRatio: CropAspectRatioPreset.original,
+                                lockAspectRatio: false),
+                            IOSUiSettings(
+                              title: 'Cropper',
+                            ),
+                          ],
+                        );
+                        if (croppedFile != null) {
+                          context.read<UpdateUserDataBloc>().add(UploadPicture(
+                              croppedFile.path,
+                              FirebaseAuth.instance.currentUser!.uid));
+                        }
                       }
-                    }
-                  },
-                  child: BlocListener<UserInfoBloc, UserInfoState>(
-                    listener: (context, state) {
-                      if (state is UserInfoLoaded) {
+                    },
+                    child: BlocListener<UserInfoBloc, UserInfoState>(
+                      listener: (context, state) {
+                        if (state is UserInfoLoaded) {
+                          setState(() {
+                            url = state.user.image;
+                          });
+                        }
+                      },
+                      child: CircleAvatar(
+                        radius: 50.0,
+                        child: url == ''
+                            ? const Icon(Icons.person)
+                            : ClipOval(
+                                child: Image.network(url!, fit: BoxFit.cover)),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      FirebaseAuth.instance.currentUser?.email ?? '',
+                      style: const TextStyle(
+                        fontFamily: 'Wendy',
+                        fontSize: 20,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text("Dark Mode".tr()),
+                    leading: const Icon(Icons.lightbulb_outline),
+                    trailing: Switch(
+                      value: isLightMode,
+                      onChanged: (bool value) {
                         setState(() {
-                          url = state.user.image;
+                          isLightMode = value;
                         });
-                      }
-                    },
-                    child: CircleAvatar(
-                      radius: 50.0,
-                      child: url == ''
-                          ? const Icon(Icons.person)
-                          : ClipOval(
-                              child: Image.network(url!, fit: BoxFit.cover)),
+                        context.read<ThemeblocBloc>().add(ThemeChange());
+                      },
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Text(
-                    FirebaseAuth.instance.currentUser?.email ?? '',
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return InformationPage(email: 'Email test', image: url);
+                      }));
+                    },
+                    leading: const Icon(Icons.home),
+                    title: Text('Home'.tr()),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const SettingScreen();
+                      }));
+                    },
+                    leading: const Icon(Icons.settings),
+                    title: Text('Language Settings'.tr()),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      context
+                          .read<UserSignInBloc>()
+                          .add(const SignOutRequired());
+                      context.read<FriendsBloc>().add(FriendLogout());
+                    },
+                    title: Text("Log out".tr()),
+                    leading: const Icon(Icons.exit_to_app),
+                  ),
+                  const Spacer(),
+                  DefaultTextStyle(
                     style: const TextStyle(
-                      fontFamily: 'Wendy',
-                      fontSize: 20,
+                      fontSize: 12,
                     ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                ListTile(
-                  title: Text("Dark Mode".tr()),
-                  leading: const Icon(Icons.lightbulb_outline),
-                  trailing: Switch(
-                    value: isLightMode,
-                    onChanged: (bool value) {
-                      setState(() {
-                        isLightMode = value;
-                      });
-                      context.read<ThemeblocBloc>().add(ThemeChange());
-                    },
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return InformationPage(email: 'Email test', image: url);
-                    }));
-                  },
-                  leading: const Icon(Icons.home),
-                  title: Text('Home'.tr()),
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const SettingScreen();
-                    }));
-                  },
-                  leading: const Icon(Icons.settings),
-                  title: Text('Language Settings'.tr()),
-                ),
-                ListTile(
-                  onTap: () {
-                    context.read<UserSignInBloc>().add(const SignOutRequired());
-                    context.read<FriendsBloc>().add(FriendLogout());
-                  },
-                  title: Text("Log out".tr()),
-                  leading: const Icon(Icons.exit_to_app),
-                ),
-                const Spacer(),
-                DefaultTextStyle(
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 16.0,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 16.0,
+                      ),
+                      child: const Text('Terms of Service & Privacy Policy'),
                     ),
-                    child: const Text('Terms of Service & Privacy Policy'),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

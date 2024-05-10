@@ -14,6 +14,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 // Main function
 
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeblocBloc, ThemeblocState>(
         builder: (context, state) {
-          return MaterialApp(
+          return MaterialApp.router(
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
@@ -58,27 +59,71 @@ class MyApp extends StatelessWidget {
             darkTheme: DarkTheme.theme,
             theme: LightTheme.theme,
             debugShowCheckedModeBanner: false,
-            home: StreamBuilder(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Builder(builder: (context) {
-                    return GlobalBlocProviders(
-                        child: MyHomePage(title: "Chats".tr()));
-                  });
-                } else {
-                  return BlocProvider(
-                    create: (context) => UserSignInBloc(
-                      UserRepository: getIt<UserRepository>(),
-                    ),
-                    child: const LoginRegister(),
-                  );
-                }
-              },
-            ),
+            routerConfig: _router,
+            // home: StreamBuilder(
+            //   stream: FirebaseAuth.instance.authStateChanges(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasData) {
+            //       return Builder(builder: (context) {
+            //         return GlobalBlocProviders(
+            //             child: MyHomePage(title: "Chats".tr()));
+            //       });
+            //     } else {
+            //       return BlocProvider(
+            //         create: (context) => UserSignInBloc(
+            //           UserRepository: getIt<UserRepository>(),
+            //         ),
+            //         child: const LoginRegister(),
+            //       );
+            //     }
+            //   },
+            // ),
           );
         },
       ),
     );
   }
 }
+
+final GoRouter _router = GoRouter(
+  initialLocation: '/sign-in',
+  redirect: (context, state) {
+    final isLoggedIn = FirebaseAuth.instance.currentUser != null;
+    if (isLoggedIn) {
+      return '/home';
+    } else {
+      return '/login';
+    }
+  },
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/home',
+      name: 'home',
+      builder: (BuildContext context, GoRouterState state) {
+        return BlocProvider.value(
+          value: BlocProvider.of<ThemeblocBloc>(context),
+          child: GlobalBlocProviders(child: MyHomePage(title: "Chats".tr())),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/login',
+      name: 'login',
+      redirect: (context, state) {
+        final isLoggedIn = FirebaseAuth.instance.currentUser != null;
+        if (isLoggedIn) {
+          return '/home';
+        } else {
+          return '/login';
+        }
+      },
+      builder: (BuildContext context, GoRouterState state) {
+        return BlocProvider(
+          create: (_) =>
+              UserSignInBloc(UserRepository: getIt<UserRepository>()),
+          child: const LoginRegister(),
+        );
+      },
+    ),
+  ],
+);
