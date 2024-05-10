@@ -4,6 +4,8 @@ import 'package:chatapp/bussines_logic_app/themebloc/themebloc_bloc.dart';
 
 import 'package:chatapp/data_layer_infrastructure/user_repository.dart';
 import 'package:chatapp/di.dart';
+import 'package:chatapp/presentation/info_page/friend_list.dart';
+import 'package:chatapp/presentation/info_page/information.dart';
 
 import 'package:chatapp/presentation/loginRegisterToggle.dart';
 import 'package:chatapp/presentation/main_chat/pages/mainchatpage.dart';
@@ -86,14 +88,16 @@ class MyApp extends StatelessWidget {
 }
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/sign-in',
+  initialLocation: '/login',
   redirect: (context, state) {
     final isLoggedIn = FirebaseAuth.instance.currentUser != null;
     if (isLoggedIn) {
-      return '/home';
+      if (_router.routerDelegate.currentConfiguration.uri.toString() ==
+          '/login') return '/home';
     } else {
       return '/login';
     }
+    return null;
   },
   routes: <RouteBase>[
     GoRoute(
@@ -125,5 +129,21 @@ final GoRouter _router = GoRouter(
         );
       },
     ),
+    GoRoute(
+      path: '/friend_list',
+      name: 'friend_list',
+      builder: (BuildContext context, GoRouterState state) {
+        return const FriendListPage();
+      },
+    ),
+    GoRoute(
+        path: '/info',
+        name: 'info',
+        builder: (BuildContext context, GoRouterState state) {
+          return InformationPage(
+            email: state.uri.queryParameters['id'],
+            image: state.uri.queryParameters['image'],
+          );
+        }),
   ],
 );
