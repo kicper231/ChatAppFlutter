@@ -1,4 +1,3 @@
-import 'package:chatapp/presentation/components/gaps.dart';
 import 'package:chatapp/presentation/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,7 @@ class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key, required this.toggleView});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RegisterPageState createState() => _RegisterPageState();
 }
 
@@ -85,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
             ),
-            gapH16,
+            gapH12,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

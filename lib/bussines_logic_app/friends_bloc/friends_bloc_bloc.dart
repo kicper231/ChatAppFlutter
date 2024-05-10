@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:chatapp/data_layer_infrastructure/friends_repository.dart';
 import 'package:chatapp/models_domain/model/friend.dart';
 import 'package:equatable/equatable.dart';
-import 'package:injectable/injectable.dart';
 
 part 'friends_bloc_event.dart';
 part 'friends_bloc_state.dart';

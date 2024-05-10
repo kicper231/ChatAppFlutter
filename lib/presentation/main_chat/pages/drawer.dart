@@ -129,7 +129,7 @@ class _MydrawerState extends State<Mydrawer> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return const InformationPage();
+                      return InformationPage(email: 'Email test', image: url);
                     }));
                   },
                   leading: const Icon(Icons.home),
