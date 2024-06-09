@@ -7,10 +7,10 @@ import 'package:chatapp/di.dart';
 import 'package:chatapp/presentation/info_page/friend_list.dart';
 import 'package:chatapp/presentation/info_page/information.dart';
 
-import 'package:chatapp/presentation/loginRegisterToggle.dart';
 import 'package:chatapp/presentation/main_chat/pages/mainchatpage.dart';
 import 'package:chatapp/presentation/themes/DarkTheme.dart';
 import 'package:chatapp/presentation/themes/LightTheme.dart';
+import 'package:chatapp/routing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:chatapp/presentation/login_register_toggle.dart';
 // Main function
 
 Future<void> main() async {
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
             darkTheme: DarkTheme.theme,
             theme: LightTheme.theme,
             debugShowCheckedModeBanner: false,
-            routerConfig: _router,
+            routerConfig: router,
             // home: StreamBuilder(
             //   stream: FirebaseAuth.instance.authStateChanges(),
             //   builder: (context, snapshot) {
@@ -86,64 +87,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-final GoRouter _router = GoRouter(
-  initialLocation: '/login',
-  redirect: (context, state) {
-    final isLoggedIn = FirebaseAuth.instance.currentUser != null;
-    if (isLoggedIn) {
-      if (_router.routerDelegate.currentConfiguration.uri.toString() ==
-          '/login') return '/home';
-    } else {
-      return '/login';
-    }
-    return null;
-  },
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/home',
-      name: 'home',
-      builder: (BuildContext context, GoRouterState state) {
-        return BlocProvider.value(
-          value: BlocProvider.of<ThemeblocBloc>(context),
-          child: GlobalBlocProviders(child: MyHomePage(title: "Chats".tr())),
-        );
-      },
-    ),
-    GoRoute(
-      path: '/login',
-      name: 'login',
-      redirect: (context, state) {
-        final isLoggedIn = FirebaseAuth.instance.currentUser != null;
-        if (isLoggedIn) {
-          return '/home';
-        } else {
-          return '/login';
-        }
-      },
-      builder: (BuildContext context, GoRouterState state) {
-        return BlocProvider(
-          create: (_) =>
-              UserSignInBloc(UserRepository: getIt<UserRepository>()),
-          child: const LoginRegister(),
-        );
-      },
-    ),
-    GoRoute(
-      path: '/friend_list',
-      name: 'friend_list',
-      builder: (BuildContext context, GoRouterState state) {
-        return const FriendListPage();
-      },
-    ),
-    GoRoute(
-        path: '/info',
-        name: 'info',
-        builder: (BuildContext context, GoRouterState state) {
-          return InformationPage(
-            email: state.uri.queryParameters['id'],
-            image: state.uri.queryParameters['image'],
-          );
-        }),
-  ],
-);
